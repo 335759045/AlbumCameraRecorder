@@ -1,3 +1,4 @@
+include ':albumCameraRecorderCommonKotlin'
 include ':combined'
 include ':videoedit'
 include ':imageedit'
