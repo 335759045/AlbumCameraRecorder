@@ -78,7 +78,7 @@ class IncapableCause {
                 DIALOG -> {
                     val incapableDialog: IncapableDialog? = IncapableDialog.newInstance(cause.mTitle, cause.mMessage)
                     incapableDialog?.show((context as FragmentActivity).supportFragmentManager,
-                            IncapableDialog::class.java.getName())
+                            IncapableDialog::class.java.name)
                 }
                 TOAST -> Toast.makeText(context, cause.mMessage, Toast.LENGTH_SHORT).show()
                 else -> Toast.makeText(context, cause.mMessage, Toast.LENGTH_SHORT).show()
