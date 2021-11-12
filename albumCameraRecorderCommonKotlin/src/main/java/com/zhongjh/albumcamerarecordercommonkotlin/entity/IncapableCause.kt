@@ -68,6 +68,7 @@ class IncapableCause {
          * @param context 上下文
          * @param cause 本身
          */
+        @JvmStatic
         fun handleCause(context: Context, cause: IncapableCause?) {
             if (cause == null) {
                 return

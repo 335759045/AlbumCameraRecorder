@@ -15,7 +15,6 @@ import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Set;
 
-import gaode.zhongjh.com.common.utils.BasePhotoMetadataUtils;
 
 /**
  * @author zhongjh

@@ -13,13 +13,13 @@ import com.zhongjh.albumcamerarecorder.settings.AlbumSpec;
 import com.zhongjh.albumcamerarecorder.utils.MultiMediaUtils;
 import com.zhongjh.albumcamerarecorder.utils.PathUtils;
 import com.zhongjh.albumcamerarecorder.utils.SelectableUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.IncapableCause;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import gaode.zhongjh.com.common.entity.IncapableCause;
 import gaode.zhongjh.com.common.entity.MultiMedia;
 
 import static gaode.zhongjh.com.common.enums.Constant.IMAGE;

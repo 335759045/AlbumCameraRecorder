@@ -46,5 +46,6 @@ dependencies {
     api 'com.github.zhongjhATC:CircularProgressView:1.7'
 
     compileOnly project(':albumCameraRecorderCommon')
+    compileOnly project(':albumCameraRecorderCommonKotlin')
     compileOnly project(':imageedit')
 }

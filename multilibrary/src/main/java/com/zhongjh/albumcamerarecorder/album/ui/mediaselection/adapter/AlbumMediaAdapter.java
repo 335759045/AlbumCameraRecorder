@@ -29,7 +29,6 @@ import android.widget.ImageView;
 
 import com.zhongjh.albumcamerarecorder.R;
 import com.zhongjh.albumcamerarecorder.album.base.BaseRecyclerViewCursorAdapter;
-import gaode.zhongjh.com.common.entity.IncapableCause;
 import gaode.zhongjh.com.common.entity.MultiMedia;
 
 import com.zhongjh.albumcamerarecorder.album.entity.Album;
@@ -37,6 +36,7 @@ import com.zhongjh.albumcamerarecorder.album.model.SelectedItemCollection;
 import com.zhongjh.albumcamerarecorder.album.widget.CheckView;
 import com.zhongjh.albumcamerarecorder.album.widget.MediaGrid;
 import com.zhongjh.albumcamerarecorder.settings.AlbumSpec;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.IncapableCause;
 
 /**
  * 相册适配器

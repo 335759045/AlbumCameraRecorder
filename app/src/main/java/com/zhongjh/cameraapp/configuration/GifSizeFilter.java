@@ -19,12 +19,12 @@ import android.content.Context;
 import android.graphics.Point;
 
 
-import gaode.zhongjh.com.common.entity.IncapableCause;
 import gaode.zhongjh.com.common.entity.MultiMedia;
 import gaode.zhongjh.com.common.enums.MimeType;
 
 import com.zhongjh.albumcamerarecorder.album.filter.BaseFilter;
 import com.zhongjh.albumcamerarecorder.album.utils.PhotoMetadataUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.IncapableCause;
 import com.zhongjh.cameraapp.R;
 
 import java.util.HashSet;

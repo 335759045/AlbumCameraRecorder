@@ -39,6 +39,7 @@ import com.zhongjh.albumcamerarecorder.preview.SelectedPreviewActivity;
 import com.zhongjh.albumcamerarecorder.settings.AlbumSpec;
 import com.zhongjh.albumcamerarecorder.settings.GlobalSpec;
 import com.zhongjh.albumcamerarecorder.utils.PathUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.widget.IncapableDialog;
 
 import java.util.ArrayList;
 
@@ -52,7 +53,6 @@ import gaode.zhongjh.com.common.enums.MultimediaTypes;
 import gaode.zhongjh.com.common.utils.ColorFilterUtil;
 import gaode.zhongjh.com.common.utils.DisplayMetricsUtils;
 import gaode.zhongjh.com.common.utils.StatusBarUtils;
-import gaode.zhongjh.com.common.widget.IncapableDialog;
 
 import static android.app.Activity.RESULT_OK;
 import static com.zhongjh.albumcamerarecorder.constants.Constant.EXTRA_MULTIMEDIA_CHOICE;

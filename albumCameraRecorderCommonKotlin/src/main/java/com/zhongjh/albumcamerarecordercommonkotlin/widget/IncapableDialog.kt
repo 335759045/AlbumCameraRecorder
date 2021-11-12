@@ -22,6 +22,7 @@ class IncapableDialog : DialogFragment() {
         private const val EXTRA_TITLE = "extra_title"
         private const val EXTRA_MESSAGE = "extra_message"
 
+        @JvmStatic
         fun newInstance(title: String?, message: String?): IncapableDialog? {
             val dialog = IncapableDialog()
             val args = Bundle()
