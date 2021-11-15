@@ -115,16 +115,28 @@ enum class MimeType(val mMimeTypeName: String, val mExtensions: Set<String>) {
             return EnumSet.of(type, *rest)
         }
 
-        fun ofImage() : Set<MimeType> {
+        fun ofImage(): Set<MimeType> {
             return EnumSet.of(JPEG, PNG, GIF, BMP, WEBP)
         }
 
-        fun ofVideo() : Set<MimeType> {
+        fun ofVideo(): Set<MimeType> {
             return EnumSet.of(MPEG, MP4, QUICKTIME, THREEGPP, THREEGPP2, MKV, WEBM, TS, AVI)
         }
 
-        fun isImage(mimeType : String?) : Boolean {
-            return mimeType?.startsWith("image")  ?: false
+        fun isImage(mimeType: String?): Boolean {
+            return mimeType?.startsWith("image") ?: false
+        }
+
+        fun isVideo(mimeType: String?): Boolean {
+            return mimeType?.startsWith("video") ?: false
+        }
+
+        fun isGif(mimeType: String?): Boolean {
+            if (mimeType == null) {
+                return false
+            } else {
+                return mimeType == GIF.toString()
+            }
         }
 
         private fun arraySetOf(vararg suffixes: String): Set<String> {
