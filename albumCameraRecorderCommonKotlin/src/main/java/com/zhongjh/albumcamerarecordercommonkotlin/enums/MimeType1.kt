@@ -5,7 +5,6 @@ import android.net.Uri
 import android.text.TextUtils
 import android.webkit.MimeTypeMap
 import androidx.collection.ArraySet
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.BasePhotoMetadataUtils
 import java.util.*
 
 /**
@@ -20,56 +19,55 @@ enum class MimeType1(
          * 保存上面所有类型
          */
         private val mExtensions: Set<String>) {
-
     // ============== 图片 ==============
-    JPEG("image/jpeg", MimeType1.arraySetOf(
+    JPEG("image/jpeg", arraySetOf(
             "jpg",
             "jpeg"
     )),
-    PNG("image/png", MimeType1.Companion.arraySetOf(
+    PNG("image/png", arraySetOf(
             "png"
     )),
-    GIF("image/gif", MimeType1.Companion.arraySetOf(
+    GIF("image/gif", arraySetOf(
             "gif"
     )),
-    BMP("image/x-ms-bmp", MimeType1.Companion.arraySetOf(
+    BMP("image/x-ms-bmp", arraySetOf(
             "bmp"
     )),
-    WEBP("image/webp", MimeType1.Companion.arraySetOf(
+    WEBP("image/webp", arraySetOf(
             "webp"
     )),  // ============== 音频 ==============
-    MP3("video/mp3", MimeType1.Companion.arraySetOf(
+    MP3("video/mp3", arraySetOf(
             "mp3"
     )),  // ============== 视频 ==============
-    MPEG("video/mpeg", MimeType1.Companion.arraySetOf(
+    MPEG("video/mpeg", arraySetOf(
             "mpeg",
             "mpg"
     )),
-    MP4("video/mp4", MimeType1.Companion.arraySetOf(
+    MP4("video/mp4", arraySetOf(
             "mp4",
             "m4v"
     )),
-    QUICKTIME("video/quicktime", MimeType1.Companion.arraySetOf(
+    QUICKTIME("video/quicktime", arraySetOf(
             "mov"
     )),
-    THREEGPP("video/3gpp", MimeType1.Companion.arraySetOf(
+    THREEGPP("video/3gpp", arraySetOf(
             "3gp",
             "3gpp"
     )),
-    THREEGPP2("video/3gpp2", MimeType1.Companion.arraySetOf(
+    THREEGPP2("video/3gpp2", arraySetOf(
             "3g2",
             "3gpp2"
     )),
-    MKV("video/x-matroska", MimeType1.Companion.arraySetOf(
+    MKV("video/x-matroska", arraySetOf(
             "mkv"
     )),
-    WEBM("video/webm", MimeType1.Companion.arraySetOf(
+    WEBM("video/webm", arraySetOf(
             "webm"
     )),
-    TS("video/mp2ts", MimeType1.Companion.arraySetOf(
+    TS("video/mp2ts", arraySetOf(
             "ts"
     )),
-    AVI("video/avi", MimeType1.Companion.arraySetOf(
+    AVI("video/avi", arraySetOf(
             "avi"
     ));
 
@@ -114,34 +112,34 @@ enum class MimeType1(
     }
 
     companion object {
-        fun ofAll(): Set<MimeType1> {
-            return EnumSet.allOf(MimeType1::class.java)
+        fun ofAll(): Set<MimeType> {
+            return EnumSet.allOf(MimeType::class.java)
         }
 
-        fun of(type: MimeType1?, vararg rest: MimeType1?): Set<MimeType1> {
+        fun of(type: MimeType?, vararg rest: MimeType?): Set<MimeType> {
             return EnumSet.of(type, *rest)
         }
 
-        fun ofImage(): Set<MimeType1> {
-            return EnumSet.of(JPEG, MimeType1.PNG, MimeType1.GIF, MimeType1.BMP, MimeType1.WEBP)
+        fun ofImage(): Set<MimeType> {
+            return EnumSet.of(JPEG, PNG, GIF, BMP, WEBP)
         }
 
-        fun ofVideo(): Set<MimeType1> {
-            return EnumSet.of(MimeType1.MPEG, MimeType1.MP4, MimeType1.QUICKTIME, MimeType1.THREEGPP, MimeType1.THREEGPP2, MimeType1.MKV, MimeType1.WEBM, MimeType1.TS, MimeType1.AVI)
+        fun ofVideo(): Set<MimeType> {
+            return EnumSet.of(MPEG, MP4, QUICKTIME, THREEGPP, THREEGPP2, MKV, WEBM, TS, AVI)
         }
 
-        fun isImage(MimeType1: String?): Boolean {
-            return MimeType1?.startsWith("image") ?: false
+        fun isImage(mimeType: String?): Boolean {
+            return mimeType?.startsWith("image") ?: false
         }
 
-        fun isVideo(MimeType1: String?): Boolean {
-            return MimeType1?.startsWith("video") ?: false
+        fun isVideo(mimeType: String?): Boolean {
+            return mimeType?.startsWith("video") ?: false
         }
 
-        fun isGif(MimeType1: String?): Boolean {
-            return if (MimeType1 == null) {
+        fun isGif(mimeType: String?): Boolean {
+            return if (mimeType == null) {
                 false
-            } else MimeType1 == GIF.toString()
+            } else mimeType == MimeType.GIF.toString()
         }
 
         private fun arraySetOf(vararg suffixes: String): Set<String> {

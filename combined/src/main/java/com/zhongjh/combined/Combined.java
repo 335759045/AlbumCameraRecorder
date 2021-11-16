@@ -13,6 +13,8 @@ import com.zhongjh.albumcamerarecorder.preview.BasePreviewActivity;
 import com.zhongjh.albumcamerarecorder.recorder.db.RecordingItem;
 import com.zhongjh.albumcamerarecorder.settings.GlobalSetting;
 import com.zhongjh.albumcamerarecorder.settings.MultiMediaSetting;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
 import com.zhongjh.progresslibrary.entity.MultiMediaView;
 import com.zhongjh.progresslibrary.listener.AbstractMaskProgressLayoutListener;
 import com.zhongjh.progresslibrary.listener.MaskProgressLayoutListener;
@@ -20,9 +22,6 @@ import com.zhongjh.progresslibrary.widget.MaskProgressLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import gaode.zhongjh.com.common.entity.MultiMedia;
-import gaode.zhongjh.com.common.enums.MultimediaTypes;
 
 /**
  * 协调多个控件之间代码，更加简化代码

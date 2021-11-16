@@ -19,12 +19,12 @@ import android.content.Context;
 import android.graphics.Point;
 
 
-import gaode.zhongjh.com.common.entity.MultiMedia;
-import gaode.zhongjh.com.common.enums.MimeType;
 
 import com.zhongjh.albumcamerarecorder.album.filter.BaseFilter;
 import com.zhongjh.albumcamerarecorder.album.utils.PhotoMetadataUtils;
 import com.zhongjh.albumcamerarecordercommonkotlin.entity.IncapableCause;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
 import com.zhongjh.cameraapp.R;
 
 import java.util.HashSet;
@@ -56,7 +56,7 @@ public class GifSizeFilter extends BaseFilter {
         }
 
         Point size = PhotoMetadataUtils.getBitmapBound(context.getContentResolver(), item.getMediaUri());
-        if (size.x < mMinWidth || size.y < mMinHeight || item.size > mMaxSize) {
+        if (size.x < mMinWidth || size.y < mMinHeight || item.getSize() > mMaxSize) {
             return new IncapableCause(IncapableCause.DIALOG, context.getString(R.string.error_gif, mMinWidth,
                     String.valueOf(PhotoMetadataUtils.getSizeInMb(mMaxSize))));
         }

@@ -25,11 +25,10 @@ import android.view.ViewGroup;
 
 
 import com.zhongjh.albumcamerarecorder.preview.previewitem.PreviewItemFragment;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import gaode.zhongjh.com.common.entity.MultiMedia;
 
 /**
  * @author zhongjh

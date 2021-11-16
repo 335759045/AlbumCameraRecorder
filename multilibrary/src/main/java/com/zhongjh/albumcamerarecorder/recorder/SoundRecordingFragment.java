@@ -35,12 +35,12 @@ import com.zhongjh.albumcamerarecorder.settings.RecordeSpec;
 import com.zhongjh.albumcamerarecorder.utils.BitmapUtils;
 import com.zhongjh.albumcamerarecorder.utils.ViewBusinessUtils;
 import com.zhongjh.albumcamerarecorder.widget.BaseOperationLayout;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import gaode.zhongjh.com.common.enums.MultimediaTypes;
 import gaode.zhongjh.com.common.utils.MediaStoreCompat;
 import gaode.zhongjh.com.common.utils.StatusBarUtils;
 import gaode.zhongjh.com.common.utils.ThreadUtils;

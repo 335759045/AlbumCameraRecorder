@@ -18,6 +18,8 @@ import com.zhongjh.albumcamerarecorder.settings.CameraSetting;
 import com.zhongjh.albumcamerarecorder.settings.GlobalSetting;
 import com.zhongjh.albumcamerarecorder.settings.MultiMediaSetting;
 import com.zhongjh.albumcamerarecorder.settings.RecorderSetting;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
 import com.zhongjh.cameraapp.BaseActivity;
 import com.zhongjh.cameraapp.configuration.CompressionLuBan;
 import com.zhongjh.cameraapp.configuration.GifSizeFilter;
@@ -29,12 +31,9 @@ import com.zhongjh.progresslibrary.listener.MaskProgressLayoutListener;
 import com.zhongjh.progresslibrary.widget.MaskProgressLayout;
 import com.zhongjh.videoedit.VideoEditManager;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 import gaode.zhongjh.com.common.entity.SaveStrategy;
-import gaode.zhongjh.com.common.enums.MimeType;
-import gaode.zhongjh.com.common.enums.MultimediaTypes;
 
 /**
  * 配置版
@@ -76,7 +75,6 @@ public class MainActivity extends BaseActivity {
             }
 
             @Override
-            @SuppressWarnings({"unchecked", "rawtypes"})
             public void onItemClick(View view, MultiMediaView multiMediaView) {
                 // 点击详情
                 if (multiMediaView.getType() == MultimediaTypes.PICTURE || multiMediaView.getType() == MultimediaTypes.VIDEO) {

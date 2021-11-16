@@ -44,4 +44,5 @@ dependencies {
     // 处理svg图片的颜色
     implementation 'com.sdsmdg.harjot:vectormaster:1.1.3'
     compileOnly project(':albumCameraRecorderCommon')
+    compileOnly project(':albumCameraRecorderCommonKotlin')
 }

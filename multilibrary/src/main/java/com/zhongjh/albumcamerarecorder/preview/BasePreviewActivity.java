@@ -30,12 +30,12 @@ import com.zhongjh.albumcamerarecorder.settings.AlbumSpec;
 import com.zhongjh.albumcamerarecorder.settings.GlobalSpec;
 import com.zhongjh.albumcamerarecorder.utils.BitmapUtils;
 import com.zhongjh.albumcamerarecordercommonkotlin.entity.IncapableCause;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
 import com.zhongjh.albumcamerarecordercommonkotlin.widget.IncapableDialog;
 import com.zhongjh.imageedit.ImageEditActivity;
 
 import java.io.File;
 
-import gaode.zhongjh.com.common.entity.MultiMedia;
 import gaode.zhongjh.com.common.utils.MediaStoreCompat;
 import gaode.zhongjh.com.common.utils.StatusBarUtils;
 
@@ -467,7 +467,7 @@ public class BasePreviewActivity extends AppCompatActivity implements View.OnCli
         for (int i = 0; i < selectedCount; i++) {
             MultiMedia item = mSelectedCollection.asList().get(i);
             if (item.isImage()) {
-                float size = PhotoMetadataUtils.getSizeInMb(item.size);
+                float size = PhotoMetadataUtils.getSizeInMb(item.getSize());
                 if (size > mAlbumSpec.originalMaxSize) {
                     count++;
                 }
@@ -486,7 +486,7 @@ public class BasePreviewActivity extends AppCompatActivity implements View.OnCli
     protected void updateSize(MultiMedia item) {
         if (item.isGif()) {
             mViewHolder.size.setVisibility(View.VISIBLE);
-            mViewHolder.size.setText(PhotoMetadataUtils.getSizeInMb(item.size) + "M");
+            mViewHolder.size.setText(PhotoMetadataUtils.getSizeInMb(item.getSize()) + "M");
         } else {
             mViewHolder.size.setVisibility(View.GONE);
         }

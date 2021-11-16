@@ -18,12 +18,11 @@ import com.zhongjh.albumcamerarecorder.album.filter.BaseFilter;
 import com.zhongjh.albumcamerarecorder.settings.AlbumSpec;
 import com.zhongjh.albumcamerarecorder.settings.GlobalSpec;
 
-import gaode.zhongjh.com.common.entity.MultiMedia;
-import gaode.zhongjh.com.common.enums.MimeType;
-import gaode.zhongjh.com.common.utils.BasePhotoMetadataUtils;
-
 import com.zhongjh.albumcamerarecorder.constants.ModuleTypes;
 import com.zhongjh.albumcamerarecordercommonkotlin.entity.IncapableCause;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.BasePhotoMetadataUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
 import com.zhongjh.progresslibrary.R;
 import com.zhongjh.progresslibrary.adapter.PhotoAdapter;
 import com.zhongjh.progresslibrary.api.MaskProgressApi;
@@ -33,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gaode.zhongjh.com.common.entity.SaveStrategy;
-import gaode.zhongjh.com.common.enums.MultimediaTypes;
 import gaode.zhongjh.com.common.utils.MediaStoreCompat;
 import gaode.zhongjh.com.common.utils.ThreadUtils;
 

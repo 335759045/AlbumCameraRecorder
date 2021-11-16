@@ -25,15 +25,14 @@ import com.zhongjh.albumcamerarecorder.camera.listener.ErrorListener;
 import com.zhongjh.albumcamerarecorder.camera.listener.OperateCameraListener;
 import com.zhongjh.albumcamerarecorder.preview.BasePreviewActivity;
 import com.zhongjh.albumcamerarecorder.utils.ViewBusinessUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
 import com.zhongjh.imageedit.ImageEditActivity;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import gaode.zhongjh.com.common.entity.MultiMedia;
-import gaode.zhongjh.com.common.enums.MultimediaTypes;
 
 import static android.app.Activity.RESULT_OK;
 import static com.zhongjh.albumcamerarecorder.preview.BasePreviewActivity.REQ_IMAGE_EDIT;

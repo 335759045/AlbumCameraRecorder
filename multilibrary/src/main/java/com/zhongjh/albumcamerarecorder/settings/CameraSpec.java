@@ -3,10 +3,10 @@ package com.zhongjh.albumcamerarecorder.settings;
 import com.zhongjh.albumcamerarecorder.R;
 
 import gaode.zhongjh.com.common.coordinator.VideoEditCoordinator;
-import gaode.zhongjh.com.common.enums.MimeType;
 
 import com.zhongjh.albumcamerarecorder.camera.listener.OnCameraViewListener;
 import com.zhongjh.albumcamerarecorder.constants.ModuleTypes;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
 
 import java.util.Set;
 

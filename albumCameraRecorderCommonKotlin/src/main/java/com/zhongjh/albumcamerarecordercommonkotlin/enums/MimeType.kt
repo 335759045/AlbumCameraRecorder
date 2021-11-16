@@ -18,7 +18,7 @@ import java.util.*
 enum class MimeType(val mMimeTypeName: String, val mExtensions: Set<String>) {
 
     // ============== 图片 ==============
-    JPEG("image/jpeg", MimeType.arraySetOf(
+    JPEG("image/jpeg", arraySetOf(
             "jpg",
             "jpeg"
     )),
@@ -105,32 +105,43 @@ enum class MimeType(val mMimeTypeName: String, val mExtensions: Set<String>) {
         return false
     }
 
+    private fun arraySetOf(vararg suffixes: String): Set<String> {
+        return ArraySet(listOf(*suffixes))
+    }
+
     companion object {
 
+        @JvmStatic
         fun ofAll(): Set<MimeType> {
             return EnumSet.allOf(MimeType::class.java)
         }
 
+        @JvmStatic
         fun of(type: MimeType, vararg rest: MimeType): Set<MimeType> {
             return EnumSet.of(type, *rest)
         }
 
+        @JvmStatic
         fun ofImage(): Set<MimeType> {
             return EnumSet.of(JPEG, PNG, GIF, BMP, WEBP)
         }
 
+        @JvmStatic
         fun ofVideo(): Set<MimeType> {
             return EnumSet.of(MPEG, MP4, QUICKTIME, THREEGPP, THREEGPP2, MKV, WEBM, TS, AVI)
         }
 
+        @JvmStatic
         fun isImage(mimeType: String?): Boolean {
             return mimeType?.startsWith("image") ?: false
         }
 
+        @JvmStatic
         fun isVideo(mimeType: String?): Boolean {
             return mimeType?.startsWith("video") ?: false
         }
 
+        @JvmStatic
         fun isGif(mimeType: String?): Boolean {
             if (mimeType == null) {
                 return false
@@ -139,8 +150,6 @@ enum class MimeType(val mMimeTypeName: String, val mExtensions: Set<String>) {
             }
         }
 
-        private fun arraySetOf(vararg suffixes: String): Set<String> {
-            return ArraySet(listOf(*suffixes))
-        }
+
     }
 }

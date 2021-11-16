@@ -27,10 +27,10 @@ import android.provider.MediaStore;
 
 import androidx.loader.content.CursorLoader;
 
-import gaode.zhongjh.com.common.enums.MimeType;
 
 import com.zhongjh.albumcamerarecorder.album.entity.Album;
 import com.zhongjh.albumcamerarecorder.settings.AlbumSpec;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
 
 import java.util.HashMap;
 import java.util.HashSet;

@@ -11,8 +11,7 @@ import android.provider.MediaStore
  * @author zhongjh
  * @date 2021/11/12
  */
-class BasePhotoMetadataUtils {
-
+open class BasePhotoMetadataUtils {
 
     companion object {
 
@@ -25,6 +24,7 @@ class BasePhotoMetadataUtils {
          * @param uri      图片的uri
          * @return 图片路径
          */
+        @JvmStatic
         fun getPath(resolver: ContentResolver, uri: Uri?): String? {
             if (uri == null) {
                 return null

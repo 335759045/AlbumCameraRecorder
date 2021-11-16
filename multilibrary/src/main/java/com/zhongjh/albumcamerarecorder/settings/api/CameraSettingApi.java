@@ -3,18 +3,16 @@ package com.zhongjh.albumcamerarecorder.settings.api;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.zhongjh.albumcamerarecorder.album.listener.OnSelectedListener;
 import com.zhongjh.albumcamerarecorder.camera.listener.OnCameraViewListener;
 import com.zhongjh.albumcamerarecorder.settings.AlbumSetting;
 import com.zhongjh.albumcamerarecorder.settings.CameraSetting;
 import com.zhongjh.albumcamerarecorder.settings.GlobalSetting;
 import com.zhongjh.albumcamerarecorder.settings.MultiMediaSetting;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
 
 import java.util.Set;
 
 import gaode.zhongjh.com.common.coordinator.VideoEditCoordinator;
-import gaode.zhongjh.com.common.enums.MimeType;
-
 /**
  * 有关拍摄界面的动态设置
  *

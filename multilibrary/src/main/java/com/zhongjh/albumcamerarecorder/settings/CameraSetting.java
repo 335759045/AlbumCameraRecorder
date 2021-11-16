@@ -5,9 +5,9 @@ import androidx.annotation.Nullable;
 
 import com.zhongjh.albumcamerarecorder.camera.listener.OnCameraViewListener;
 import com.zhongjh.albumcamerarecorder.settings.api.CameraSettingApi;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
 
 import gaode.zhongjh.com.common.coordinator.VideoEditCoordinator;
-import gaode.zhongjh.com.common.enums.MimeType;
 
 import java.util.Set;
 

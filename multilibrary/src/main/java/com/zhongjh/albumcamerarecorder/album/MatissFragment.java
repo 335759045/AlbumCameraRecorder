@@ -39,6 +39,9 @@ import com.zhongjh.albumcamerarecorder.preview.SelectedPreviewActivity;
 import com.zhongjh.albumcamerarecorder.settings.AlbumSpec;
 import com.zhongjh.albumcamerarecorder.settings.GlobalSpec;
 import com.zhongjh.albumcamerarecorder.utils.PathUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
 import com.zhongjh.albumcamerarecordercommonkotlin.widget.IncapableDialog;
 
 import java.util.ArrayList;
@@ -47,11 +50,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import gaode.zhongjh.com.common.entity.MultiMedia;
-import gaode.zhongjh.com.common.enums.MimeType;
-import gaode.zhongjh.com.common.enums.MultimediaTypes;
 import gaode.zhongjh.com.common.utils.ColorFilterUtil;
-import gaode.zhongjh.com.common.utils.DisplayMetricsUtils;
 import gaode.zhongjh.com.common.utils.StatusBarUtils;
 
 import static android.app.Activity.RESULT_OK;
@@ -458,7 +457,7 @@ public class MatissFragment extends Fragment implements AlbumCollection.AlbumCal
             MultiMedia item = mSelectedCollection.asList().get(i);
 
             if (item.isImage()) {
-                float size = PhotoMetadataUtils.getSizeInMb(item.size);
+                float size = PhotoMetadataUtils.getSizeInMb(item.getSize());
 
                 if (size > mAlbumSpec.originalMaxSize) {
                     count++;

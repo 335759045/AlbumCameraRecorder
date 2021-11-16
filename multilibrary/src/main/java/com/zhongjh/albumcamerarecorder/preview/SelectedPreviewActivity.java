@@ -5,10 +5,10 @@ import androidx.annotation.Nullable;
 
 import com.zhongjh.albumcamerarecorder.settings.GlobalSpec;
 import com.zhongjh.albumcamerarecorder.album.model.SelectedItemCollection;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
 
 import java.util.List;
 
-import gaode.zhongjh.com.common.entity.MultiMedia;
 
 /**
  * 点击左下角的预览按钮进入的界面

@@ -17,6 +17,8 @@ import com.zhongjh.albumcamerarecorder.settings.CameraSetting;
 import com.zhongjh.albumcamerarecorder.settings.GlobalSetting;
 import com.zhongjh.albumcamerarecorder.settings.MultiMediaSetting;
 import com.zhongjh.albumcamerarecorder.settings.RecorderSetting;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
+import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
 import com.zhongjh.cameraapp.BaseActivity;
 import com.zhongjh.cameraapp.configuration.GifSizeFilter;
 import com.zhongjh.cameraapp.configuration.Glide4Engine;
@@ -33,8 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gaode.zhongjh.com.common.entity.SaveStrategy;
-import gaode.zhongjh.com.common.enums.MimeType;
-import gaode.zhongjh.com.common.enums.MultimediaTypes;
 
 /**
  * 这是用于设置加载数据的
