@@ -1,26 +1,24 @@
 package com.zhongjh.progresslibrary.widget;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
 import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
 import com.zhongjh.progresslibrary.R;
 import com.zhongjh.progresslibrary.adapter.PhotoAdapter;
 import com.zhongjh.progresslibrary.api.MaskProgressApi;
@@ -29,12 +27,9 @@ import com.zhongjh.progresslibrary.entity.MultiMediaView;
 import com.zhongjh.progresslibrary.entity.RecordingItem;
 import com.zhongjh.progresslibrary.listener.MaskProgressLayoutListener;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
-import gaode.zhongjh.com.common.utils.MediaStoreCompat;
 import gaode.zhongjh.com.common.utils.ThreadUtils;
 
 /**
@@ -135,7 +130,6 @@ public class MaskProgressLayout extends FrameLayout implements MaskProgressApi {
         // 自定义View中如果重写了onDraw()即自定义了绘制，那么就应该在构造函数中调用view的setWillNotDraw(false).
         setWillNotDraw(false);
 
-        mMediaStoreCompat = new MediaStoreCompat(getContext());
         mViewHolder = new ViewHolder(View.inflate(getContext(), R.layout.layout_mask_progress, this));
 
         // 获取系统颜色
@@ -160,6 +154,8 @@ public class MaskProgressLayout extends FrameLayout implements MaskProgressApi {
         String imageEngineStr = maskProgressLayoutStyle.getString(R.styleable.MaskProgressLayout_imageEngine);
         // provider的authorities,用于提供给外部的file
         String authority = maskProgressLayoutStyle.getString(R.styleable.MaskProgressLayout_authority);
+        SaveStrategy saveStrategy = new SaveStrategy(true, authority, "");
+        mMediaStoreCompat = new MediaStoreCompat(getContext().getApplicationContext(), saveStrategy);
         // 获取最多显示多少个方框
         int maxCount = maskProgressLayoutStyle.getInteger(R.styleable.MaskProgressLayout_maxCount, 5);
         int imageDeleteColor = maskProgressLayoutStyle.getColor(R.styleable.MaskProgressLayout_imageDeleteColor, colorPrimary);
@@ -201,8 +197,6 @@ public class MaskProgressLayout extends FrameLayout implements MaskProgressApi {
             }
         }
 
-        SaveStrategy saveStrategy = new SaveStrategy(true, authority, "");
-        mMediaStoreCompat.setSaveStrategy(saveStrategy);
 
         if (drawable == null) {
             drawable = ContextCompat.getDrawable(getContext(), R.color.thumbnail_placeholder);
@@ -526,7 +520,7 @@ public class MaskProgressLayout extends FrameLayout implements MaskProgressApi {
      * 检测属性
      */
     private void isAuthority() {
-        if (mMediaStoreCompat.getSaveStrategy() == null || mMediaStoreCompat.getSaveStrategy().authority == null) {
+        if (mMediaStoreCompat.getSaveStrategy() == null || mMediaStoreCompat.getSaveStrategy().getDirectory() == null) {
             // 必须定义authority属性，指定provider的authorities,用于提供给外部的file,否则Android7.0以上报错。也可以代码设置setAuthority
             throw new RuntimeException("You must define the authority attribute, which specifies the provider's authorities, to serve to external files. Otherwise, Android7.0 will report an error.You can also set setAuthority in code");
         }

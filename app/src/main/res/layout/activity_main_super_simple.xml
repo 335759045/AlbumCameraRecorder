@@ -11,6 +11,9 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
+<!--            app:authority="com.zhongjh.cameraapp.fileprovider"-->
+
             <com.zhongjh.progresslibrary.widget.MaskProgressLayout
                 android:id="@+id/mplImageList"
                 android:layout_width="match_parent"
@@ -18,7 +21,6 @@
                 app:audioDeleteColor="@color/blue_primary"
                 app:audioPlayColor="@color/blue_primary"
                 app:audioProgressColor="@color/blue_primary"
-                app:authority="com.zhongjh.cameraapp.fileprovider"
                 app:columnNumber="4"
                 app:columnSpace="10"
                 app:imageAddDrawable="@drawable/ic_add_gray"

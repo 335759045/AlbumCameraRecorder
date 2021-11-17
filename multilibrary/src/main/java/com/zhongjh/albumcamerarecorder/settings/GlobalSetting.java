@@ -19,7 +19,7 @@ import com.zhongjh.albumcamerarecorder.R;
 import com.zhongjh.albumcamerarecorder.album.engine.ImageEngine;
 
 import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
-import gaode.zhongjh.com.common.utils.MediaStoreCompat;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
 
 import com.zhongjh.albumcamerarecorder.camera.util.FileUtil;
 import com.zhongjh.albumcamerarecorder.listener.CompressionInterface;

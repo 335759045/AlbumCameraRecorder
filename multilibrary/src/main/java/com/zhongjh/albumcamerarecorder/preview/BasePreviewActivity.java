@@ -36,7 +36,7 @@ import com.zhongjh.imageedit.ImageEditActivity;
 
 import java.io.File;
 
-import gaode.zhongjh.com.common.utils.MediaStoreCompat;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
 import gaode.zhongjh.com.common.utils.StatusBarUtils;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
@@ -127,17 +127,16 @@ public class BasePreviewActivity extends AppCompatActivity implements View.OnCli
         mIsSelectedCheck = getIntent().getBooleanExtra(IS_SELECTED_CHECK, true);
         mIsAlbumUri = getIntent().getBooleanExtra(IS_ALBUM_URI, false);
 
-        mPictureMediaStoreCompat = new MediaStoreCompat(this);
         // 设置图片路径
         if (mGlobalSpec.pictureStrategy != null) {
             // 如果设置了视频的文件夹路径，就使用它的
-            mPictureMediaStoreCompat.setSaveStrategy(mGlobalSpec.pictureStrategy);
+            mPictureMediaStoreCompat = new MediaStoreCompat(this.getApplicationContext(),mGlobalSpec.pictureStrategy);
         } else {
             // 否则使用全局的
             if (mGlobalSpec.saveStrategy == null) {
                 throw new RuntimeException("Don't forget to set SaveStrategy.");
             } else {
-                mPictureMediaStoreCompat.setSaveStrategy(mGlobalSpec.saveStrategy);
+                mPictureMediaStoreCompat = new MediaStoreCompat(this.getApplicationContext(),mGlobalSpec.saveStrategy);
             }
         }
 
@@ -205,7 +204,8 @@ public class BasePreviewActivity extends AppCompatActivity implements View.OnCli
                         if (multiMedia.getPath() != null) {
                             File file = new File(multiMedia.getPath());
                             // 加入相册库
-                            Uri editMediaUri = BitmapUtils.displayToGallery(this, file, TYPE_PICTURE, -1, mPictureMediaStoreCompat.getSaveStrategy().directory, mPictureMediaStoreCompat);
+                            Uri editMediaUri = BitmapUtils.displayToGallery(this, file, TYPE_PICTURE, -1,
+                                    mPictureMediaStoreCompat.getSaveStrategy().getDirectory(), mPictureMediaStoreCompat);
                             multiMedia.setUri(null);
                             multiMedia.setMediaUri(editMediaUri);
                         }

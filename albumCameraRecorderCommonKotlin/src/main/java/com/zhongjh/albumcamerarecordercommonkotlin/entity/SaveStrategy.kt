@@ -22,4 +22,8 @@ package com.zhongjh.albumcamerarecordercommonkotlin.entity
  * @param authority AndroidManifest中authorities值相同，用于适配7.0系统 必须设置
  * @param directory 子文件夹的具体路径
  */
-class SaveStrategy(var isPublic: Boolean, var authority: String, var directory: String)
+class SaveStrategy(var isPublic: Boolean, var authority: String?, var directory: String) {
+    init {
+        checkNotNull(authority) { "Authority cannot be null" }
+    }
+}

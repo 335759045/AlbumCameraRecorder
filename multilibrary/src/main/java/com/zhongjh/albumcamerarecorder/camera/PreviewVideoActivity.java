@@ -23,7 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import gaode.zhongjh.com.common.listener.VideoEditListener;
-import gaode.zhongjh.com.common.utils.MediaStoreCompat;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
 import gaode.zhongjh.com.common.utils.StatusBarUtils;
 import gaode.zhongjh.com.common.utils.ThreadUtils;
 
@@ -127,8 +127,8 @@ public class PreviewVideoActivity extends AppCompatActivity {
     private void initData() {
         // 公共配置
         GlobalSpec mGlobalSpec = GlobalSpec.getInstance();
-        mVideoMediaStoreCompat = new MediaStoreCompat(PreviewVideoActivity.this.getApplicationContext());
-        mVideoMediaStoreCompat.setSaveStrategy(mGlobalSpec.videoStrategy == null ? mGlobalSpec.saveStrategy : mGlobalSpec.videoStrategy);
+        mVideoMediaStoreCompat = new MediaStoreCompat(PreviewVideoActivity.this.getApplicationContext(),
+                mGlobalSpec.videoStrategy == null ? mGlobalSpec.saveStrategy : mGlobalSpec.videoStrategy);
 
         mFile = new File(mPath);
         playVideo(mFile);
@@ -254,7 +254,8 @@ public class PreviewVideoActivity extends AppCompatActivity {
     private void confirm(File newFile) {
         Intent intent = new Intent();
         // 加入视频到android系统库里面
-        Uri mediaUri = BitmapUtils.displayToGallery(getApplicationContext(), newFile, TYPE_VIDEO, mDuration, mVideoMediaStoreCompat.getSaveStrategy().directory, mVideoMediaStoreCompat);
+        Uri mediaUri = BitmapUtils.displayToGallery(getApplicationContext(), newFile, TYPE_VIDEO, mDuration,
+                mVideoMediaStoreCompat.getSaveStrategy().getDirectory(), mVideoMediaStoreCompat);
         intent.putExtra("path", newFile.getPath());
         intent.putExtra("uri", mediaUri);
         setResult(RESULT_OK, intent);

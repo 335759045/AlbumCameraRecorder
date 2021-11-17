@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,7 +40,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import gaode.zhongjh.com.common.utils.MediaStoreCompat;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
 import gaode.zhongjh.com.common.utils.StatusBarUtils;
 import gaode.zhongjh.com.common.utils.ThreadUtils;
 
@@ -491,8 +490,8 @@ public class SoundRecordingFragment extends BaseFragment {
         // 根据配置创建文件配置
         GlobalSpec globalSpec = GlobalSpec.getInstance();
         // 音频文件配置路径
-        mAudioMediaStoreCompat = new MediaStoreCompat(getContext());
-        mAudioMediaStoreCompat.setSaveStrategy(globalSpec.audioStrategy == null ? globalSpec.saveStrategy : globalSpec.audioStrategy);
+        mAudioMediaStoreCompat = new MediaStoreCompat(mContext.getApplicationContext(),
+                globalSpec.audioStrategy == null ? globalSpec.saveStrategy : globalSpec.audioStrategy);
         mFile = mAudioMediaStoreCompat.createFile(2, true);
 
         mRecorder = new MediaRecorder();
