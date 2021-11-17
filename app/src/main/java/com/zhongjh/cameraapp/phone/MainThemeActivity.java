@@ -27,7 +27,7 @@ import com.zhongjh.progresslibrary.listener.MaskProgressLayoutListener;
 import com.zhongjh.progresslibrary.widget.MaskProgressLayout;
 
 
-import gaode.zhongjh.com.common.entity.SaveStrategy;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
 
 /**
  * 多种样式版

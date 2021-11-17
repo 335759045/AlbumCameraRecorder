@@ -30,7 +30,7 @@ import com.zhongjh.progresslibrary.widget.MaskProgressLayout;
 
 import java.util.Map;
 
-import gaode.zhongjh.com.common.entity.SaveStrategy;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
 
 /**
  * @author zhongjh

@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import gaode.zhongjh.com.common.entity.SaveStrategy;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
 
 /**
  * 有关多媒体的文件操作

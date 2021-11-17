@@ -33,7 +33,7 @@ import com.zhongjh.videoedit.VideoEditManager;
 
 import java.util.Set;
 
-import gaode.zhongjh.com.common.entity.SaveStrategy;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
 
 /**
  * 配置版

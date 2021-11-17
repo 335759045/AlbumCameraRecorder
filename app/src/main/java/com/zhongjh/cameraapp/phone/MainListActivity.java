@@ -13,7 +13,7 @@ import com.zhongjh.cameraapp.databinding.ActivityMainListBinding;
 
 import java.util.ArrayList;
 
-import gaode.zhongjh.com.common.entity.SaveStrategy;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
 
 /**
  * list配置

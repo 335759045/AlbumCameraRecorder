@@ -18,7 +18,7 @@ import com.zhongjh.albumcamerarecorder.MainActivity;
 import com.zhongjh.albumcamerarecorder.R;
 import com.zhongjh.albumcamerarecorder.album.engine.ImageEngine;
 
-import gaode.zhongjh.com.common.entity.SaveStrategy;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
 import gaode.zhongjh.com.common.utils.MediaStoreCompat;
 
 import com.zhongjh.albumcamerarecorder.camera.util.FileUtil;

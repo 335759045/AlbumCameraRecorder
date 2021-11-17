@@ -127,7 +127,7 @@ public class PreviewVideoActivity extends AppCompatActivity {
     private void initData() {
         // 公共配置
         GlobalSpec mGlobalSpec = GlobalSpec.getInstance();
-        mVideoMediaStoreCompat = new MediaStoreCompat(PreviewVideoActivity.this);
+        mVideoMediaStoreCompat = new MediaStoreCompat(PreviewVideoActivity.this.getApplicationContext());
         mVideoMediaStoreCompat.setSaveStrategy(mGlobalSpec.videoStrategy == null ? mGlobalSpec.saveStrategy : mGlobalSpec.videoStrategy);
 
         mFile = new File(mPath);

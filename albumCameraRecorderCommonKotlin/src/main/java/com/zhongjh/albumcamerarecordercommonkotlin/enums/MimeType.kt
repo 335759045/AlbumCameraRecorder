@@ -18,56 +18,58 @@ import java.util.*
 enum class MimeType(val mMimeTypeName: String, val mExtensions: Set<String>) {
 
     // ============== 图片 ==============
-    JPEG("image/jpeg", arraySetOf(
+    JPEG("image/jpeg", ArraySet(listOf(
             "jpg",
             "jpeg"
-    )),
-    PNG("image/png", MimeType.arraySetOf(
+    ))),
+    PNG("image/png", ArraySet(listOf(
             "png"
-    )),
-    GIF("image/gif", MimeType.arraySetOf(
+    ))),
+    GIF("image/gif", ArraySet(listOf(
             "gif"
-    )),
-    BMP("image/x-ms-bmp", MimeType.arraySetOf(
+    ))),
+    BMP("image/x-ms-bmp", ArraySet(listOf(
             "bmp"
-    )),
-    WEBP("image/webp", MimeType.arraySetOf(
+    ))),
+    WEBP("image/webp", ArraySet(listOf(
             "webp"
-    )),  // ============== 音频 ==============
-    MP3("video/mp3", MimeType.arraySetOf(
+    ))),
+    // ============== 音频 ==============
+    MP3("video/mp3", ArraySet(listOf(
             "mp3"
-    )),  // ============== 视频 ==============
-    MPEG("video/mpeg", MimeType.arraySetOf(
+    ))),
+    // ============== 视频 ==============
+    MPEG("video/mpeg", ArraySet(listOf(
             "mpeg",
             "mpg"
-    )),
-    MP4("video/mp4", MimeType.arraySetOf(
+    ))),
+    MP4("video/mp4", ArraySet(listOf(
             "mp4",
             "m4v"
-    )),
-    QUICKTIME("video/quicktime", MimeType.arraySetOf(
+    ))),
+    QUICKTIME("video/quicktime", ArraySet(listOf(
             "mov"
-    )),
-    THREEGPP("video/3gpp", MimeType.arraySetOf(
+    ))),
+    THREEGPP("video/3gpp", ArraySet(listOf(
             "3gp",
             "3gpp"
-    )),
-    THREEGPP2("video/3gpp2", MimeType.arraySetOf(
+    ))),
+    THREEGPP2("video/3gpp2", ArraySet(listOf(
             "3g2",
             "3gpp2"
-    )),
-    MKV("video/x-matroska", MimeType.arraySetOf(
+    ))),
+    MKV("video/x-matroska", ArraySet(listOf(
             "mkv"
-    )),
-    WEBM("video/webm", MimeType.arraySetOf(
+    ))),
+    WEBM("video/webm", ArraySet(listOf(
             "webm"
-    )),
-    TS("video/mp2ts", MimeType.arraySetOf(
+    ))),
+    TS("video/mp2ts", ArraySet(listOf(
             "ts"
-    )),
-    AVI("video/avi", MimeType.arraySetOf(
+    ))),
+    AVI("video/avi", ArraySet(listOf(
             "avi"
-    ));
+    )));
 
     override fun toString(): String {
         return mMimeTypeName
@@ -105,9 +107,7 @@ enum class MimeType(val mMimeTypeName: String, val mExtensions: Set<String>) {
         return false
     }
 
-    private fun arraySetOf(vararg suffixes: String): Set<String> {
-        return ArraySet(listOf(*suffixes))
-    }
+
 
     companion object {
 

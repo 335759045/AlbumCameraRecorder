@@ -34,7 +34,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import gaode.zhongjh.com.common.entity.SaveStrategy;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
 
 /**
  * 这是用于设置加载数据的

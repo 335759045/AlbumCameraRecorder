@@ -33,7 +33,7 @@ import com.zhongjh.progresslibrary.widget.MaskProgressLayout;
 
 import java.util.ArrayList;
 
-import gaode.zhongjh.com.common.entity.SaveStrategy;
+import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
 
 /**
  * 自定义CameraView

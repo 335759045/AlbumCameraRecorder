@@ -50,7 +50,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import gaode.zhongjh.com.common.utils.ColorFilterUtil;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.ColorFilterUtil;
 import gaode.zhongjh.com.common.utils.StatusBarUtils;
 
 import static android.app.Activity.RESULT_OK;
