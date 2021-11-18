@@ -22,7 +22,7 @@ import com.zhongjh.albumcamerarecorder.camera.listener.ClickOrLongListener;
 
 import java.util.ArrayList;
 
-import gaode.zhongjh.com.common.utils.DisplayMetricsUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.DisplayMetricsUtils;
 
 import static com.zhongjh.albumcamerarecorder.camera.common.Constants.BUTTON_STATE_BOTH;
 import static com.zhongjh.albumcamerarecorder.camera.common.Constants.BUTTON_STATE_ONLY_CLICK;

@@ -8,12 +8,12 @@ import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.ViewSwitcher;
 
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.StatusBarUtils;
 import com.zhongjh.imageedit.core.ImageMode;
 import com.zhongjh.imageedit.core.ImageText;
 import com.zhongjh.imageedit.view.ImageColorGroup;
 import com.zhongjh.imageedit.view.ImageViewCustom;
 
-import gaode.zhongjh.com.common.utils.StatusBarUtils;
 
 /**
  * Created by felix on 2017/12/5 下午3:08.

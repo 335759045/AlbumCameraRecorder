@@ -11,7 +11,7 @@ import android.util.Log;
 
 import com.zhongjh.progresslibrary.R;
 
-import gaode.zhongjh.com.common.utils.DisplayMetricsUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.DisplayMetricsUtils;
 
 /**
  * 用于图片、视频的加载进度的view

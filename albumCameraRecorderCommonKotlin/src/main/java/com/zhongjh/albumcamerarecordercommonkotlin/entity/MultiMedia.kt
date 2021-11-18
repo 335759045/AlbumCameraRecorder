@@ -228,6 +228,7 @@ open class MultiMedia : Parcelable {
 
     companion object {
 
+        @JvmField
         val CREATOR : Creator<MultiMedia> = object : Creator<MultiMedia> {
             override fun createFromParcel(source: Parcel): MultiMedia {
                 return MultiMedia(source)

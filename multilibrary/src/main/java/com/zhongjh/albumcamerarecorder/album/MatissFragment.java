@@ -51,7 +51,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import com.zhongjh.albumcamerarecordercommonkotlin.utils.ColorFilterUtil;
-import gaode.zhongjh.com.common.utils.StatusBarUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.StatusBarUtils;
 
 import static android.app.Activity.RESULT_OK;
 import static com.zhongjh.albumcamerarecorder.constants.Constant.EXTRA_MULTIMEDIA_CHOICE;

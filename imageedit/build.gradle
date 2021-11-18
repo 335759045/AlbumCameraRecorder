@@ -35,4 +35,5 @@ dependencies {
     implementation "com.google.android.material:material:$rootProject.ext.androidMaterialSdkVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.ext.constraintlayoutSdkVersion"
     implementation project(path: ':albumCameraRecorderCommon')
+    implementation project(path: ':albumCameraRecorderCommonKotlin')
 }

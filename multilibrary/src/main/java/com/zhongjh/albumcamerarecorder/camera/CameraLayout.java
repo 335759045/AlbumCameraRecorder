@@ -60,7 +60,7 @@ import java.util.List;
 
 import gaode.zhongjh.com.common.listener.VideoEditListener;
 import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
-import gaode.zhongjh.com.common.utils.StatusBarUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.StatusBarUtils;
 import gaode.zhongjh.com.common.utils.ThreadUtils;
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 

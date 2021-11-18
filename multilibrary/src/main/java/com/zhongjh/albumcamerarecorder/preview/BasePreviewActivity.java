@@ -37,7 +37,7 @@ import com.zhongjh.imageedit.ImageEditActivity;
 import java.io.File;
 
 import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
-import gaode.zhongjh.com.common.utils.StatusBarUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.StatusBarUtils;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 import static com.zhongjh.albumcamerarecorder.camera.common.Constants.TYPE_PICTURE;

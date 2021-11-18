@@ -3,7 +3,6 @@ plugins {
     id 'kotlin-android-extensions'
     id 'kotlin-android'
 }
-
 android {
     compileSdkVersion 31
     buildToolsVersion "30.0.3"

@@ -27,7 +27,7 @@ import com.zhongjh.albumcamerarecorder.album.ui.mediaselection.adapter.AlbumMedi
 import com.zhongjh.albumcamerarecorder.album.widget.MediaGridInset;
 import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
 
-import gaode.zhongjh.com.common.utils.DisplayMetricsUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.DisplayMetricsUtils;
 
 /**
  * 相册 界面

@@ -41,7 +41,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
-import gaode.zhongjh.com.common.utils.StatusBarUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.StatusBarUtils;
 import gaode.zhongjh.com.common.utils.ThreadUtils;
 
 import static android.app.Activity.RESULT_OK;
