@@ -52,6 +52,8 @@ import com.zhongjh.albumcamerarecorder.utils.PackageManagerUtils;
 import com.zhongjh.albumcamerarecorder.utils.SelectableUtils;
 import com.zhongjh.albumcamerarecorder.widget.BaseOperationLayout;
 import com.zhongjh.albumcamerarecorder.widget.ChildClickableFrameLayout;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.StatusBarUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,14 +61,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gaode.zhongjh.com.common.listener.VideoEditListener;
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.StatusBarUtils;
 import gaode.zhongjh.com.common.utils.ThreadUtils;
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
 import static com.zhongjh.albumcamerarecorder.camera.common.Constants.BUTTON_STATE_BOTH;
 import static com.zhongjh.albumcamerarecorder.camera.common.Constants.BUTTON_STATE_ONLY_CLICK;
 import static com.zhongjh.albumcamerarecorder.camera.common.Constants.BUTTON_STATE_ONLY_LONG_CLICK;
+import static com.zhongjh.albumcamerarecorder.camera.common.Constants.STATE_VIDEO_IN;
 import static com.zhongjh.albumcamerarecorder.camera.common.Constants.TYPE_DEFAULT;
 import static com.zhongjh.albumcamerarecorder.camera.common.Constants.TYPE_PICTURE;
 import static com.zhongjh.albumcamerarecorder.camera.common.Constants.TYPE_SHORT;
@@ -299,19 +300,16 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
         // 设置图片路径
         if (mGlobalSpec.pictureStrategy != null) {
             // 如果设置了视频的文件夹路径，就使用它的
-            mPictureMediaStoreCompat = new MediaStoreCompat(getContext().getApplicationContext(),
-                    mGlobalSpec.pictureStrategy);
+            mPictureMediaStoreCompat = new MediaStoreCompat(getContext(), mGlobalSpec.pictureStrategy);
         } else {
             // 否则使用全局的
             if (mGlobalSpec.saveStrategy == null) {
                 throw new RuntimeException("Don't forget to set SaveStrategy.");
             } else {
-                mPictureMediaStoreCompat = new MediaStoreCompat(getContext().getApplicationContext(),
-                        mGlobalSpec.saveStrategy);
+                mPictureMediaStoreCompat = new MediaStoreCompat(getContext(), mGlobalSpec.saveStrategy);
             }
         }
-        mVideoMediaStoreCompat = new MediaStoreCompat(getContext(),
-                mGlobalSpec.videoStrategy == null ? mGlobalSpec.saveStrategy : mGlobalSpec.videoStrategy);
+        mVideoMediaStoreCompat = new MediaStoreCompat(getContext(), mGlobalSpec.videoStrategy == null ? mGlobalSpec.saveStrategy : mGlobalSpec.videoStrategy);
 
         // 默认图片
         TypedArray ta = mContext.getTheme().obtainStyledAttributes(
@@ -375,8 +373,6 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
         mViewHolder.pvLayout.setDuration(mCameraSpec.duration * 1000);
         // 最短录制时间
         mViewHolder.pvLayout.setMinDuration(mCameraSpec.minDuration);
-
-        initPvLayoutButtonFeatures();
     }
 
     /**
@@ -448,6 +444,8 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
         LogUtil.i("CameraLayout onResume");
         // 重置状态
         resetState(TYPE_DEFAULT);
+        mViewHolder.pvLayout.viewHolder.btnClickOrLong.reset();
+        initPvLayoutButtonFeatures();
         mViewHolder.cameraView.open();
     }
 
@@ -584,6 +582,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
                         mVideoFile = mVideoMediaStoreCompat.createFile(1, true);
                     }
                     mViewHolder.cameraView.takeVideoSnapshot(mVideoFile);
+                    setState(STATE_VIDEO_IN);
                     // 开始录像
                     setSwitchVisibility(INVISIBLE);
                     mViewHolder.imgFlash.setVisibility(INVISIBLE);
@@ -1050,8 +1049,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
                                     ArrayList<Uri> uris = getUris(newPaths);
                                     // 加入图片到android系统库里面
                                     for (String path : newPaths) {
-                                        BitmapUtils.displayToGallery(getContext(), new File(path), TYPE_PICTURE, -1,
-                                                mPictureMediaStoreCompat.getSaveStrategy().getDirectory(), mPictureMediaStoreCompat);
+                                        BitmapUtils.displayToGallery(getContext(), new File(path), TYPE_PICTURE, -1, mPictureMediaStoreCompat.getSaveStrategy().getDirectory(), mPictureMediaStoreCompat);
                                     }
                                     // 执行完成
                                     mOperateCameraListener.captureSuccess(newPaths, uris);
