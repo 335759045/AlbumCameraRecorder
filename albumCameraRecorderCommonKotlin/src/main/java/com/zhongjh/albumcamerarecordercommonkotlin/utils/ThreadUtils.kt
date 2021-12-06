@@ -105,6 +105,9 @@ object ThreadUtils {
             super.afterExecute(r, t)
         }
 
+        /**
+         * 执行
+         */
         override fun execute(command: Runnable) {
             // 如果被中断就直接返回
             if (this.isShutdown) {
