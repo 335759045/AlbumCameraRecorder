@@ -1047,7 +1047,7 @@ public final class ThreadUtils {
                     return new ThreadPoolExecutor4Util(type, type,
                             0L, TimeUnit.MILLISECONDS,
                             new LinkedBlockingQueue4Util(),
-                            new UtilsThreadFactory("fixed(" + type + ")", priority)
+                            new UtilsThreadFactory("fixed(" + type + ")", priority).
                     );
             }
         }
@@ -1171,6 +1171,9 @@ public final class ThreadUtils {
             t.setPriority(priority);
             return t;
         }
+
+
+
     }
 
     public abstract static class BaseSimpleBaseTask<T> extends BaseTask<T> {
