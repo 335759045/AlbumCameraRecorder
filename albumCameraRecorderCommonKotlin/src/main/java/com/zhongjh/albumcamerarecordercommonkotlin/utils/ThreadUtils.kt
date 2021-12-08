@@ -324,6 +324,12 @@ object ThreadUtils {
         private var mTimeoutListener: OnTimeoutListener? = null
         private var deliver: Executor? = null
 
+        val isCanceled: Boolean
+            get() = state.get() >= CANCELLED
+
+        val isDone: Boolean
+            get() = state.get() > RUNNING
+
         /**
          * 线程方法
          * @return 实体
@@ -379,6 +385,29 @@ object ThreadUtils {
                 }
                 // 创建线程
                 runner = Thread.currentThread()
+                if (mTimeoutListener != null) {
+                    mExecutorService = ScheduledThreadPoolExecutor(1, ThreadFactory { target: Runnable? -> Thread(target) })
+                    (mExecutorService as ScheduledThreadPoolExecutor).schedule(object : TimerTask() {
+                        override fun run() {
+                            if (!isDone && mTimeoutListener != null) {
+                                // 如果时间结束还没完成就是超时了
+                                timeout()
+
+                            }
+                        }
+                    }, mTimeoutMillis, TimeUnit.MILLISECONDS)
+                }
+            }
+        }
+
+
+        private fun timeout() {
+            synchronized(state) {
+                // 如果步骤已经执行到RUNNING后面了就直接返回
+                if (state.get() > RUNNING) {
+                    return
+                }
+
             }
         }
 
