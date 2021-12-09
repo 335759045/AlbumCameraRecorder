@@ -13,27 +13,52 @@ import io.microshow.rxffmpeg.RxFFmpegSubscriber;
 
 /**
  * 视频编辑管理
+ *
  * @author zhongjh
  */
-public class VideoEditManager extends VideoEditCoordinator {
+public class VideoEditManager implements VideoEditCoordinator {
 
     MyRxFfmpegSubscriber mMyRxFfmpegMergeSubscriber;
     MyRxFfmpegSubscriber mMyRxFfmpegCompressSubscriber;
 
+    /**
+     * 合并事件回调
+     */
+    protected VideoEditListener mVideoMergeListener;
+    /**
+     * 压缩事件回调
+     */
+    protected VideoEditListener mVideoCompressListener;
+
     @Override
-    public void merge(String newPath, ArrayList<String> paths,String txtPath) {
+    public void setVideoMergeListener(VideoEditListener videoMergeListener) {
+        mVideoMergeListener = videoMergeListener;
+    }
+
+    @Override
+    public void setVideoCompressListener(VideoEditListener videoCompressListener) {
+        mVideoCompressListener = videoCompressListener;
+    }
+
+    @Override
+    public void merge(String newPath, ArrayList<String> paths, String txtPath) {
+        boolean isCreate = false;
         // 创建文本文件
         File file = new File(txtPath);
         if (!file.exists()) {
             File dir = new File(file.getParent());
-            dir.mkdirs();
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+            isCreate = dir.mkdirs();
+            if (isCreate) {
+                try {
+                    isCreate = file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
-
+        if (!isCreate) {
+            return;
+        }
         StringBuilder stringBuilderFile = new StringBuilder();
         for (String path : paths) {
             stringBuilderFile.append("file ").append("'").append(path).append("'").append("\r\n");
@@ -59,7 +84,7 @@ public class VideoEditManager extends VideoEditCoordinator {
     }
 
     @Override
-    public void compress(String oldPath,String compressPath) {
+    public void compress(String oldPath, String compressPath) {
         String commands = "ffmpeg -y -i " + oldPath + " -b 2097k -r 30 -vcodec libx264 -preset superfast " + compressPath;
 
         mMyRxFfmpegCompressSubscriber = new MyRxFfmpegSubscriber(mVideoCompressListener);

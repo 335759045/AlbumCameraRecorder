@@ -42,7 +42,7 @@ import java.util.ArrayList;
 
 import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
 import com.zhongjh.albumcamerarecordercommonkotlin.utils.StatusBarUtils;
-import gaode.zhongjh.com.common.utils.ThreadUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.ThreadUtils;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;

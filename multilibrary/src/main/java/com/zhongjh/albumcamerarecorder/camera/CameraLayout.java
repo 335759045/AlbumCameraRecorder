@@ -54,6 +54,7 @@ import com.zhongjh.albumcamerarecorder.widget.BaseOperationLayout;
 import com.zhongjh.albumcamerarecorder.widget.ChildClickableFrameLayout;
 import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
 import com.zhongjh.albumcamerarecordercommonkotlin.utils.StatusBarUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.ThreadUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,7 +62,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gaode.zhongjh.com.common.listener.VideoEditListener;
-import gaode.zhongjh.com.common.utils.ThreadUtils;
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
 import static com.zhongjh.albumcamerarecorder.camera.common.Constants.BUTTON_STATE_BOTH;

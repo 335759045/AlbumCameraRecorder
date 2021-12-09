@@ -25,7 +25,7 @@ import androidx.fragment.app.Fragment;
 import gaode.zhongjh.com.common.listener.VideoEditListener;
 import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
 import com.zhongjh.albumcamerarecordercommonkotlin.utils.StatusBarUtils;
-import gaode.zhongjh.com.common.utils.ThreadUtils;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.ThreadUtils;
 
 import static com.zhongjh.albumcamerarecorder.camera.common.Constants.TYPE_VIDEO;
 import static com.zhongjh.albumcamerarecorder.constants.Constant.REQUEST_CODE_PREVIEW_VIDEO;

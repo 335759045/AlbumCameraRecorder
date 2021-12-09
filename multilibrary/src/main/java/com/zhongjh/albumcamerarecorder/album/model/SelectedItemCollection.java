@@ -19,9 +19,9 @@ import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
 import java.util.ArrayList;
 import java.util.List;
 
-import static gaode.zhongjh.com.common.enums.Constant.IMAGE;
-import static gaode.zhongjh.com.common.enums.Constant.IMAGE_VIDEO;
-import static gaode.zhongjh.com.common.enums.Constant.VIDEO;
+import static com.zhongjh.albumcamerarecordercommonkotlin.enums.Constant.IMAGE;
+import static com.zhongjh.albumcamerarecordercommonkotlin.enums.Constant.IMAGE_VIDEO;
+import static com.zhongjh.albumcamerarecordercommonkotlin.enums.Constant.VIDEO;
 
 /**
  * 选择的数据源

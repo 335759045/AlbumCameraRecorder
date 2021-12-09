@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
 import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
 import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
+import com.zhongjh.albumcamerarecordercommonkotlin.utils.ThreadUtils;
 import com.zhongjh.progresslibrary.R;
 import com.zhongjh.progresslibrary.adapter.PhotoAdapter;
 import com.zhongjh.progresslibrary.api.MaskProgressApi;
@@ -30,7 +31,6 @@ import com.zhongjh.progresslibrary.listener.MaskProgressLayoutListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import gaode.zhongjh.com.common.utils.ThreadUtils;
 
 /**
  * 这是返回（图片、视频、录音）等文件后，显示的Layout

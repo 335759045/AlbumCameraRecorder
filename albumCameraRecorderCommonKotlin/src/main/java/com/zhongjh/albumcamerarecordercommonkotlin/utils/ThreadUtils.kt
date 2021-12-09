@@ -41,6 +41,7 @@ object ThreadUtils {
     /**
      * 判断当前是否主线程
      */
+    @JvmStatic
     fun isMainThread(): Boolean {
         return Looper.myLooper() == Looper.getMainLooper()
     }
@@ -49,6 +50,7 @@ object ThreadUtils {
      * 执行ui线程
      * @param runnable 事件
      */
+    @JvmStatic
     fun runOnUiThread(runnable: Runnable) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             // 如果当前线程就是ui线程直接执行事件
@@ -63,6 +65,7 @@ object ThreadUtils {
      * @param runnable 事件
      * @param delayMillis 时间毫秒
      */
+    @JvmStatic
     fun runOnUiThreadDelayed(runnable: Runnable, delayMillis: Long) {
         handler.postDelayed(runnable, delayMillis)
     }
@@ -75,6 +78,7 @@ object ThreadUtils {
      * @param size 线程池的大小
      * @return 返回一个固定的线程池
      */
+    @JvmStatic
     fun getFixedPool(@IntRange(from = 1) size: Int): ExecutorService? {
         return getPoolByTypeAndPriority(size)
     }
@@ -88,6 +92,7 @@ object ThreadUtils {
      * @param priority: 线程在轮询中的优先级。
      * @return 返回一个固定的线程池
      */
+    @JvmStatic
     fun getFixedPool(@IntRange(from = 1) size: Int,
                      @IntRange(from = 1, to = 10) priority: Int): ExecutorService? {
         return getPoolByTypeAndPriority(size, priority)
@@ -110,6 +115,7 @@ object ThreadUtils {
      * @param priority: 线程在轮询中的优先级。
      * @return 单个线程池
      */
+    @JvmStatic
     fun getSinglePool(@IntRange(from = 1, to = 10) priority: Int): ExecutorService? {
         return getPoolByTypeAndPriority(TYPE_SINGLE, priority)
     }
@@ -129,6 +135,7 @@ object ThreadUtils {
      * @param priority 线程在轮询中的优先级。
      * @return 缓存的线程池
      */
+    @JvmStatic
     fun getCachedPool(@IntRange(from = 1, to = 10) priority: Int): ExecutorService? {
         return getPoolByTypeAndPriority(TYPE_CACHED, priority)
     }
@@ -150,6 +157,7 @@ object ThreadUtils {
      * @param priority 线程在轮询中的优先级。
      * @return IO线程池
      */
+    @JvmStatic
     fun getIoPool(@IntRange(from = 1, to = 10) priority: Int): ExecutorService? {
         return getPoolByTypeAndPriority(TYPE_IO, priority)
     }
@@ -173,6 +181,7 @@ object ThreadUtils {
      * @param priority 线程在轮询中的优先级。
      * @return 一个CPU线程池
      */
+    @JvmStatic
     fun getCpuPool(@IntRange(from = 1, to = 10) priority: Int): ExecutorService? {
         return getPoolByTypeAndPriority(TYPE_CPU, priority)
     }
@@ -184,6 +193,7 @@ object ThreadUtils {
      * @param baseTask 要执行的任务。
      * @param T  任务结果的类型。
      */
+    @JvmStatic
     fun <T> executeByFixed(@IntRange(from = 1) size: Int, baseTask: BaseTask<T>) {
         execute(getPoolByTypeAndPriority(size), baseTask)
     }
@@ -196,6 +206,7 @@ object ThreadUtils {
      * @param priority 线程在轮询中的优先级。
      * @param T  任务结果的类型。
      */
+    @JvmStatic
     fun <T> executeByFixed(@IntRange(from = 1) size: Int,
                            baseTask: BaseTask<T>,
                            @IntRange(from = 1, to = 10) priority: Int) {
@@ -211,6 +222,7 @@ object ThreadUtils {
      * @param unit  延迟参数的时间单位。
      * @param T   任务结果的类型。
      */
+    @JvmStatic
     fun <T> executeByFixedWithDelay(@IntRange(from = 1) size: Int,
                                     baseTask: BaseTask<T>,
                                     delay: Long,
@@ -228,6 +240,7 @@ object ThreadUtils {
      * @param priority 线程在轮询中的优先级。
      * @param T   任务结果的类型。
      * */
+    @JvmStatic
     fun <T> executeByFixedWithDelay(@IntRange(from = 1) size: Int,
                                     baseTask: BaseTask<T>,
                                     delay: Long,
@@ -245,6 +258,7 @@ object ThreadUtils {
      * @param unit   The time unit of the period parameter.
      * @param T    The type of the task's result.
      * */
+    @JvmStatic
     fun <T> executeByFixedAtFixRate(@IntRange(from = 1) size: Int,
                                     baseTask: BaseTask<T>,
                                     period: Long,
@@ -262,6 +276,7 @@ object ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @param T      The type of the task's result.
      */
+    @JvmStatic
     fun <T> executeByFixedAtFixRate(@IntRange(from = 1) size: Int,
                                     baseTask: BaseTask<T>,
                                     period: Long,
@@ -276,6 +291,7 @@ object ThreadUtils {
      * @param baseTask The task to execute.
      * @param T  The type of the task's result.
      */
+    @JvmStatic
     fun <T> executeBySingle(baseTask: BaseTask<T>) {
         execute(getPoolByTypeAndPriority(TYPE_SINGLE), baseTask)
     }
@@ -287,6 +303,7 @@ object ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @param <T>      The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeBySingle(baseTask: BaseTask<T>,
                             @IntRange(from = 1, to = 10) priority: Int) {
         execute(getPoolByTypeAndPriority(TYPE_SINGLE, priority), baseTask)
@@ -300,6 +317,7 @@ object ThreadUtils {
      * @param unit  The time unit of the delay parameter.
      * @param <T>   The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeBySingleWithDelay(baseTask: BaseTask<T>,
                                      delay: Long,
                                      unit: TimeUnit) {
@@ -315,6 +333,7 @@ object ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @param <T>      The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeBySingleWithDelay(baseTask: BaseTask<T>,
                                      delay: Long,
                                      unit: TimeUnit,
@@ -330,6 +349,7 @@ object ThreadUtils {
      * @param unit   The time unit of the period parameter.
      * @param <T>    The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeBySingleAtFixRate(baseTask: BaseTask<T>,
                                      period: Long,
                                      unit: TimeUnit) {
@@ -345,6 +365,7 @@ object ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @param <T>      The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeBySingleAtFixRate(baseTask: BaseTask<T>,
                                      period: Long,
                                      unit: TimeUnit,
@@ -361,6 +382,7 @@ object ThreadUtils {
      * @param unit         The time unit of the initialDelay and period parameters.
      * @param <T>          The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeBySingleAtFixRate(baseTask: BaseTask<T>,
                                      initialDelay: Long,
                                      period: Long,
@@ -378,6 +400,7 @@ object ThreadUtils {
      * @param priority     The priority of thread in the poll.
      * @param <T>          The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeBySingleAtFixRate(baseTask: BaseTask<T>,
                                      initialDelay: Long,
                                      period: Long,
@@ -394,6 +417,7 @@ object ThreadUtils {
      * @param baseTask The task to execute.
      * @param <T>  The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCached(baseTask: BaseTask<T>) {
         execute(getPoolByTypeAndPriority(TYPE_CACHED.toInt()), baseTask)
     }
@@ -405,6 +429,7 @@ object ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @param <T>      The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCached(baseTask: BaseTask<T>,
                             @IntRange(from = 1, to = 10) priority: Int) {
         execute(getPoolByTypeAndPriority(TYPE_CACHED.toInt(), priority), baseTask)
@@ -418,6 +443,7 @@ object ThreadUtils {
      * @param unit  The time unit of the delay parameter.
      * @param <T>   The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCachedWithDelay(baseTask: BaseTask<T>,
                                      delay: Long,
                                      unit: TimeUnit) {
@@ -433,6 +459,7 @@ object ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @param <T>      The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCachedWithDelay(baseTask: BaseTask<T>,
                                      delay: Long,
                                      unit: TimeUnit,
@@ -448,6 +475,7 @@ object ThreadUtils {
      * @param unit   The time unit of the period parameter.
      * @param <T>    The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCachedAtFixRate(baseTask: BaseTask<T>,
                                      period: Long,
                                      unit: TimeUnit) {
@@ -463,6 +491,7 @@ object ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @param <T>      The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCachedAtFixRate(baseTask: BaseTask<T>,
                                      period: Long,
                                      unit: TimeUnit,
@@ -479,6 +508,7 @@ object ThreadUtils {
      * @param unit         The time unit of the initialDelay and period parameters.
      * @param <T>          The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCachedAtFixRate(baseTask: BaseTask<T>,
                                      initialDelay: Long,
                                      period: Long,
@@ -496,6 +526,7 @@ object ThreadUtils {
      * @param priority     The priority of thread in the poll.
      * @param <T>          The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCachedAtFixRate(baseTask: BaseTask<T>,
                                      initialDelay: Long,
                                      period: Long,
@@ -512,6 +543,7 @@ object ThreadUtils {
      * @param baseTask The task to execute.
      * @param <T>  The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByIo(baseTask: BaseTask<T>) {
         execute(getPoolByTypeAndPriority(TYPE_IO.toInt()), baseTask)
     }
@@ -523,6 +555,7 @@ object ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @param <T>      The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByIo(baseTask: BaseTask<T>,
                         @IntRange(from = 1, to = 10) priority: Int) {
         execute(getPoolByTypeAndPriority(TYPE_IO.toInt(), priority), baseTask)
@@ -536,6 +569,7 @@ object ThreadUtils {
      * @param unit  The time unit of the delay parameter.
      * @param <T>   The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByIoWithDelay(baseTask: BaseTask<T>,
                                  delay: Long,
                                  unit: TimeUnit) {
@@ -551,6 +585,7 @@ object ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @param <T>      The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByIoWithDelay(baseTask: BaseTask<T>,
                                  delay: Long,
                                  unit: TimeUnit,
@@ -566,6 +601,7 @@ object ThreadUtils {
      * @param unit   The time unit of the period parameter.
      * @param <T>    The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByIoAtFixRate(baseTask: BaseTask<T>,
                                  period: Long,
                                  unit: TimeUnit) {
@@ -581,6 +617,7 @@ object ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @param <T>      The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByIoAtFixRate(baseTask: BaseTask<T>,
                                  period: Long,
                                  unit: TimeUnit,
@@ -589,7 +626,7 @@ object ThreadUtils {
     }
 
     /**
-     * Executes the given task in an IO thread pool at fix rate.
+     * 在 IO 线程池按固定频率执行任务
      *
      * @param baseTask         The task to execute.
      * @param initialDelay The time to delay first execution.
@@ -597,6 +634,7 @@ object ThreadUtils {
      * @param unit         The time unit of the initialDelay and period parameters.
      * @param <T>          The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByIoAtFixRate(baseTask: BaseTask<T>,
                                  initialDelay: Long,
                                  period: Long,
@@ -605,7 +643,7 @@ object ThreadUtils {
     }
 
     /**
-     * Executes the given task in an IO thread pool at fix rate.
+     * 在 IO 线程池按固定频率执行任务
      *
      * @param baseTask         The task to execute.
      * @param initialDelay The time to delay first execution.
@@ -614,6 +652,7 @@ object ThreadUtils {
      * @param priority     The priority of thread in the poll.
      * @param <T>          The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByIoAtFixRate(baseTask: BaseTask<T>,
                                  initialDelay: Long,
                                  period: Long,
@@ -630,6 +669,7 @@ object ThreadUtils {
      * @param baseTask The task to execute.
      * @param <T>  The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCpu(baseTask: BaseTask<T>) {
         execute(getPoolByTypeAndPriority(TYPE_CPU.toInt()), baseTask)
     }
@@ -641,6 +681,7 @@ object ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @param <T>      The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCpu(baseTask: BaseTask<T>,
                          @IntRange(from = 1, to = 10) priority: Int) {
         execute(getPoolByTypeAndPriority(TYPE_CPU.toInt(), priority), baseTask)
@@ -654,6 +695,7 @@ object ThreadUtils {
      * @param unit  The time unit of the delay parameter.
      * @param <T>   The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCpuWithDelay(baseTask: BaseTask<T>,
                                   delay: Long,
                                   unit: TimeUnit) {
@@ -669,6 +711,7 @@ object ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @param <T>      The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCpuWithDelay(baseTask: BaseTask<T>,
                                   delay: Long,
                                   unit: TimeUnit,
@@ -684,6 +727,7 @@ object ThreadUtils {
      * @param unit   The time unit of the period parameter.
      * @param <T>    The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCpuAtFixRate(baseTask: BaseTask<T>,
                                   period: Long,
                                   unit: TimeUnit) {
@@ -699,6 +743,7 @@ object ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @param <T>      The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCpuAtFixRate(baseTask: BaseTask<T>,
                                   period: Long,
                                   unit: TimeUnit,
@@ -715,6 +760,7 @@ object ThreadUtils {
      * @param unit         The time unit of the initialDelay and period parameters.
      * @param <T>          The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCpuAtFixRate(baseTask: BaseTask<T>,
                                   initialDelay: Long,
                                   period: Long,
@@ -732,6 +778,7 @@ object ThreadUtils {
      * @param priority     The priority of thread in the poll.
      * @param <T>          The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCpuAtFixRate(baseTask: BaseTask<T>,
                                   initialDelay: Long,
                                   period: Long,
@@ -749,6 +796,7 @@ object ThreadUtils {
      * @param baseTask The task to execute.
      * @param <T>  The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCustom(pool: ExecutorService?, baseTask: BaseTask<T>) {
         execute(pool, baseTask)
     }
@@ -762,6 +810,7 @@ object ThreadUtils {
      * @param unit  The time unit of the delay parameter.
      * @param <T>   The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCustomWithDelay(pool: ExecutorService?,
                                      baseTask: BaseTask<T>,
                                      delay: Long,
@@ -778,6 +827,7 @@ object ThreadUtils {
      * @param unit   The time unit of the period parameter.
      * @param <T>    The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCustomAtFixRate(pool: ExecutorService?,
                                      baseTask: BaseTask<T>,
                                      period: Long,
@@ -795,6 +845,7 @@ object ThreadUtils {
      * @param unit         The time unit of the initialDelay and period parameters.
      * @param <T>          The type of the task's result.
     </T> */
+    @JvmStatic
     fun <T> executeByCustomAtFixRate(pool: ExecutorService?,
                                      baseTask: BaseTask<T>,
                                      initialDelay: Long,
@@ -803,30 +854,13 @@ object ThreadUtils {
         executeAtFixedRate(pool, baseTask, initialDelay, period, unit)
     }
 
-    private fun <T> execute(pool: ExecutorService?, baseTask: BaseTask<T>) {
-        execute(pool, baseTask, 0, 0, null)
-    }
-
-    private fun <T> executeWithDelay(pool: ExecutorService?,
-                                     baseTask: BaseTask<T>,
-                                     delay: Long,
-                                     unit: TimeUnit) {
-        execute(pool, baseTask, delay, 0, unit)
-    }
-
-    private fun <T> executeAtFixedRate(pool: ExecutorService?,
-                                       baseTask: BaseTask<T>,
-                                       delay: Long,
-                                       period: Long,
-                                       unit: TimeUnit) {
-        execute(pool, baseTask, delay, period, unit)
-    }
 
     /**
      * 取消任务的执行
      *
      * @param baseTask The task to cancel.
      */
+    @JvmStatic
     fun cancel(baseTask: BaseTask<*>?) {
         if (baseTask == null) {
             return
@@ -839,6 +873,7 @@ object ThreadUtils {
      *
      * @param baseTasks The tasks to cancel.
      */
+    @JvmStatic
     fun cancel(vararg baseTasks: BaseTask<*>?) {
         if (baseTasks == null || baseTasks.size == 0) {
             return
@@ -856,6 +891,7 @@ object ThreadUtils {
      *
      * @param baseTasks The tasks to cancel.
      */
+    @JvmStatic
     fun cancel(baseTasks: List<BaseTask<*>?>?) {
         if (baseTasks == null || baseTasks.size == 0) {
             return
@@ -873,6 +909,7 @@ object ThreadUtils {
      *
      * @param executorService The pool.
      */
+    @JvmStatic
     fun cancel(executorService: ExecutorService) {
         if (executorService is ThreadPoolExecutor4Util) {
             for ((key, value) in TASK_POOL_MAP) {
@@ -892,6 +929,25 @@ object ThreadUtils {
      */
     fun setDeliver(deliver: Executor?) {
         sDeliver = deliver
+    }
+
+    private fun <T> execute(pool: ExecutorService?, baseTask: BaseTask<T>) {
+        execute(pool, baseTask, 0, 0, null)
+    }
+
+    private fun <T> executeWithDelay(pool: ExecutorService?,
+                                     baseTask: BaseTask<T>,
+                                     delay: Long,
+                                     unit: TimeUnit) {
+        execute(pool, baseTask, delay, 0, unit)
+    }
+
+    private fun <T> executeAtFixedRate(pool: ExecutorService?,
+                                       baseTask: BaseTask<T>,
+                                       delay: Long,
+                                       period: Long,
+                                       unit: TimeUnit) {
+        execute(pool, baseTask, delay, period, unit)
     }
 
     /**
