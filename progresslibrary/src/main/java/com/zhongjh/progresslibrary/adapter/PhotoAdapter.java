@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sdsmdg.harjot.vectormaster.VectorMasterView;
 import com.sdsmdg.harjot.vectormaster.models.PathModel;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
 import com.zhongjh.progresslibrary.R;
 import com.zhongjh.progresslibrary.engine.ImageEngine;
 import com.zhongjh.progresslibrary.entity.MultiMediaView;
@@ -30,7 +29,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import gaode.zhongjh.com.common.listener.OnMoreClickListener;
+import com.zhongjh.common.enums.MultimediaTypes;
+import com.zhongjh.common.listener.OnMoreClickListener;
 
 /**
  * 九宫展示数据

@@ -5,12 +5,12 @@ import com.zhongjh.albumcamerarecorder.R;
 import com.zhongjh.albumcamerarecorder.album.engine.ImageEngine;
 import com.zhongjh.albumcamerarecorder.album.engine.impl.GlideEngine;
 
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
+import com.zhongjh.common.entity.SaveStrategy;
+import com.zhongjh.common.enums.MimeType;
 
 import com.zhongjh.albumcamerarecorder.listener.CompressionInterface;
 import com.zhongjh.albumcamerarecorder.listener.OnMainListener;
 import com.zhongjh.albumcamerarecorder.constants.ModuleTypes;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
 
 import java.util.Set;
 

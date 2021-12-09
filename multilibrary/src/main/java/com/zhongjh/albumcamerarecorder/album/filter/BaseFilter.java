@@ -17,10 +17,9 @@ package com.zhongjh.albumcamerarecorder.album.filter;
 
 import android.content.Context;
 
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.IncapableCause;
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
-
+import com.zhongjh.common.entity.IncapableCause;
+import com.zhongjh.common.entity.MultiMedia;
+import com.zhongjh.common.enums.MimeType;
 
 import java.util.Set;
 

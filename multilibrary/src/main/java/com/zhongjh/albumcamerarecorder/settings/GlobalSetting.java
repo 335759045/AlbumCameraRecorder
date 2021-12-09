@@ -18,15 +18,15 @@ import com.zhongjh.albumcamerarecorder.MainActivity;
 import com.zhongjh.albumcamerarecorder.R;
 import com.zhongjh.albumcamerarecorder.album.engine.ImageEngine;
 
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
+import com.zhongjh.common.entity.SaveStrategy;
+import com.zhongjh.common.enums.MimeType;
+import com.zhongjh.common.utils.MediaStoreCompat;
 
 import com.zhongjh.albumcamerarecorder.camera.util.FileUtil;
 import com.zhongjh.albumcamerarecorder.listener.CompressionInterface;
 import com.zhongjh.albumcamerarecorder.listener.OnMainListener;
 import com.zhongjh.albumcamerarecorder.settings.api.GlobalSettingApi;
 import com.zhongjh.albumcamerarecorder.utils.SelectableUtils;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
 
 import java.io.File;
 import java.lang.annotation.Retention;

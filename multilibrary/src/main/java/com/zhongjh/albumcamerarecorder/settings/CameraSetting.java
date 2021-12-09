@@ -5,9 +5,9 @@ import androidx.annotation.Nullable;
 
 import com.zhongjh.albumcamerarecorder.camera.listener.OnCameraViewListener;
 import com.zhongjh.albumcamerarecorder.settings.api.CameraSettingApi;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
 
-import gaode.zhongjh.com.common.coordinator.VideoEditCoordinator;
+import com.zhongjh.common.coordinator.VideoEditCoordinator;
+import com.zhongjh.common.enums.MimeType;
 
 import java.util.Set;
 
@@ -46,6 +46,12 @@ public class CameraSetting implements CameraSettingApi {
     @Override
     public CameraSetting minDuration(int minDuration) {
         mCameraSpec.minDuration = minDuration;
+        return this;
+    }
+
+    @Override
+    public CameraSetting isClickRecord(boolean isClickRecord) {
+        mCameraSpec.isClickRecord = isClickRecord;
         return this;
     }
 

@@ -6,14 +6,13 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import gaode.zhongjh.com.common.coordinator.VideoEditCoordinator;
-import gaode.zhongjh.com.common.listener.VideoEditListener;
+import com.zhongjh.common.coordinator.VideoEditCoordinator;
+import com.zhongjh.common.listener.VideoEditListener;
 import io.microshow.rxffmpeg.RxFFmpegInvoke;
 import io.microshow.rxffmpeg.RxFFmpegSubscriber;
 
 /**
  * 视频编辑管理
- *
  * @author zhongjh
  */
 public class VideoEditManager implements VideoEditCoordinator {
@@ -21,14 +20,8 @@ public class VideoEditManager implements VideoEditCoordinator {
     MyRxFfmpegSubscriber mMyRxFfmpegMergeSubscriber;
     MyRxFfmpegSubscriber mMyRxFfmpegCompressSubscriber;
 
-    /**
-     * 合并事件回调
-     */
-    protected VideoEditListener mVideoMergeListener;
-    /**
-     * 压缩事件回调
-     */
-    protected VideoEditListener mVideoCompressListener;
+    VideoEditListener mVideoMergeListener;
+    VideoEditListener mVideoCompressListener;
 
     @Override
     public void setVideoMergeListener(VideoEditListener videoMergeListener) {
@@ -41,24 +34,28 @@ public class VideoEditManager implements VideoEditCoordinator {
     }
 
     @Override
-    public void merge(String newPath, ArrayList<String> paths, String txtPath) {
-        boolean isCreate = false;
+    public void merge(String newPath, ArrayList<String> paths,String txtPath) {
+        boolean isMerge = false;
         // 创建文本文件
         File file = new File(txtPath);
         if (!file.exists()) {
-            File dir = new File(file.getParent());
-            isCreate = dir.mkdirs();
-            if (isCreate) {
-                try {
-                    isCreate = file.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
+            if (file.getParent() != null) {
+                File dir = new File(file.getParent());
+                isMerge = dir.mkdirs();
+                if (isMerge) {
+                    try {
+                        isMerge = file.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
-        if (!isCreate) {
+
+        if (!isMerge && !file.exists()) {
             return;
         }
+
         StringBuilder stringBuilderFile = new StringBuilder();
         for (String path : paths) {
             stringBuilderFile.append("file ").append("'").append(path).append("'").append("\r\n");
@@ -84,7 +81,7 @@ public class VideoEditManager implements VideoEditCoordinator {
     }
 
     @Override
-    public void compress(String oldPath, String compressPath) {
+    public void compress(String oldPath,String compressPath) {
         String commands = "ffmpeg -y -i " + oldPath + " -b 2097k -r 30 -vcodec libx264 -preset superfast " + compressPath;
 
         mMyRxFfmpegCompressSubscriber = new MyRxFfmpegSubscriber(mVideoCompressListener);
@@ -96,6 +93,14 @@ public class VideoEditManager implements VideoEditCoordinator {
     }
 
     @Override
+    public void onCompressDestroy() {
+        if (mMyRxFfmpegCompressSubscriber != null) {
+            mMyRxFfmpegCompressSubscriber.dispose();
+            mVideoCompressListener = null;
+        }
+    }
+
+    @Override
     public void onMergeDestroy() {
         if (mMyRxFfmpegMergeSubscriber != null) {
             mMyRxFfmpegMergeSubscriber.dispose();
@@ -104,12 +109,21 @@ public class VideoEditManager implements VideoEditCoordinator {
     }
 
     @Override
-    public void onCompressDestroy() {
-        if (mMyRxFfmpegCompressSubscriber != null) {
-            mMyRxFfmpegCompressSubscriber.dispose();
-            mVideoCompressListener = null;
+    public void onMergeDispose() {
+        if (mMyRxFfmpegMergeSubscriber != null) {
+            mMyRxFfmpegMergeSubscriber.dispose();
         }
     }
+
+    @Override
+    public void onCompressDispose() {
+        if (mMyRxFfmpegCompressSubscriber != null) {
+            mMyRxFfmpegCompressSubscriber.dispose();
+        }
+    }
+
+
+
 
     public static class MyRxFfmpegSubscriber extends RxFFmpegSubscriber {
 

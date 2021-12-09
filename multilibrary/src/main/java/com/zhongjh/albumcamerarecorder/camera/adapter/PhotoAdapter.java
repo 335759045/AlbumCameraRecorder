@@ -19,12 +19,14 @@ import com.zhongjh.albumcamerarecorder.camera.entity.BitmapData;
 import com.zhongjh.albumcamerarecorder.preview.AlbumPreviewActivity;
 import com.zhongjh.albumcamerarecorder.preview.BasePreviewActivity;
 import com.zhongjh.albumcamerarecorder.settings.GlobalSpec;
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.zhongjh.common.entity.MultiMedia;
+import com.zhongjh.common.enums.MimeType;
+import com.zhongjh.common.enums.MultimediaTypes;
 
 import static com.zhongjh.albumcamerarecorder.album.model.SelectedItemCollection.COLLECTION_IMAGE;
 import static com.zhongjh.albumcamerarecorder.album.model.SelectedItemCollection.STATE_COLLECTION_TYPE;

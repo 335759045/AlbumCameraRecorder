@@ -1,6 +1,5 @@
 package com.zhongjh.albumcamerarecorder.camera;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -31,9 +30,12 @@ import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.PictureResult;
 import com.otaliastudios.cameraview.VideoResult;
 import com.otaliastudios.cameraview.controls.Flash;
+import com.zhongjh.albumcamerarecorder.MainActivity;
 import com.zhongjh.albumcamerarecorder.R;
 import com.zhongjh.albumcamerarecorder.camera.adapter.PhotoAdapter;
 import com.zhongjh.albumcamerarecorder.camera.adapter.PhotoAdapterListener;
+import com.zhongjh.albumcamerarecorder.camera.camerastate.CameraStateManagement;
+import com.zhongjh.albumcamerarecorder.camera.camerastate.StateInterface;
 import com.zhongjh.albumcamerarecorder.camera.common.Constants;
 import com.zhongjh.albumcamerarecorder.camera.entity.BitmapData;
 import com.zhongjh.albumcamerarecorder.camera.listener.CaptureListener;
@@ -50,28 +52,29 @@ import com.zhongjh.albumcamerarecorder.settings.GlobalSpec;
 import com.zhongjh.albumcamerarecorder.utils.BitmapUtils;
 import com.zhongjh.albumcamerarecorder.utils.PackageManagerUtils;
 import com.zhongjh.albumcamerarecorder.utils.SelectableUtils;
+import com.zhongjh.albumcamerarecorder.utils.ViewBusinessUtils;
 import com.zhongjh.albumcamerarecorder.widget.BaseOperationLayout;
 import com.zhongjh.albumcamerarecorder.widget.ChildClickableFrameLayout;
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.StatusBarUtils;
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.ThreadUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import gaode.zhongjh.com.common.listener.VideoEditListener;
+import com.zhongjh.common.listener.VideoEditListener;
+import com.zhongjh.common.utils.MediaStoreCompat;
+import com.zhongjh.common.utils.StatusBarUtils;
+import com.zhongjh.common.utils.ThreadUtils;
+
+import org.jetbrains.annotations.NotNull;
+
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
-import static com.zhongjh.albumcamerarecorder.camera.common.Constants.BUTTON_STATE_BOTH;
-import static com.zhongjh.albumcamerarecorder.camera.common.Constants.BUTTON_STATE_ONLY_CLICK;
-import static com.zhongjh.albumcamerarecorder.camera.common.Constants.BUTTON_STATE_ONLY_LONG_CLICK;
-import static com.zhongjh.albumcamerarecorder.camera.common.Constants.STATE_VIDEO_IN;
-import static com.zhongjh.albumcamerarecorder.camera.common.Constants.TYPE_DEFAULT;
 import static com.zhongjh.albumcamerarecorder.camera.common.Constants.TYPE_PICTURE;
-import static com.zhongjh.albumcamerarecorder.camera.common.Constants.TYPE_SHORT;
-import static com.zhongjh.albumcamerarecorder.camera.common.Constants.TYPE_VIDEO;
+import static com.zhongjh.albumcamerarecorder.widget.clickorlongbutton.ClickOrLongButton.BUTTON_STATE_BOTH;
+import static com.zhongjh.albumcamerarecorder.widget.clickorlongbutton.ClickOrLongButton.BUTTON_STATE_CLICK_AND_HOLD;
+import static com.zhongjh.albumcamerarecorder.widget.clickorlongbutton.ClickOrLongButton.BUTTON_STATE_ONLY_CLICK;
+import static com.zhongjh.albumcamerarecorder.widget.clickorlongbutton.ClickOrLongButton.BUTTON_STATE_ONLY_LONG_CLICK;
 
 /**
  * @author zhongjh
@@ -106,9 +109,13 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
     private CameraSpec mCameraSpec;
 
     /**
-     * 当前活动状态，默认休闲
+     * 状态管理
      */
-    public int mState = Constants.STATE_PREVIEW;
+    public final CameraStateManagement mCameraStateManagement;
+
+    public CameraStateManagement getCameraStateManagement() {
+        return mCameraStateManagement;
+    }
 
     /**
      * 闪关灯状态 默认关闭
@@ -143,24 +150,39 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
     /**
      * 视频File,用于后面能随时删除
      */
-    private File mVideoFile;
+    public File mVideoFile;
     /**
      * 照片File,用于后面能随时删除
      */
-    private File mPhotoFile;
+    public File mPhotoFile;
     /**
      * 编辑后的照片
      */
     private File mPhotoEditFile;
     /**
-     * 是否短时间录制
+     * 是否短时间录像
      */
-    private boolean mIsShort;
+    public boolean mIsShort;
 
     /**
      * 是否分段录制
      */
-    private boolean mIsSectionRecord;
+    public boolean mIsSectionRecord;
+
+    public boolean isBreakOff() {
+        Log.d(TAG, "isBreakOff: " + mIsBreakOff);
+        return mIsBreakOff;
+    }
+
+    public void setBreakOff(boolean breakOff) {
+        Log.d(TAG, "setBreakOff: " + breakOff);
+        this.mIsBreakOff = breakOff;
+    }
+
+    /**
+     * 是否中断录像
+     */
+    private boolean mIsBreakOff;
     /**
      * 上一个分段录制的时间
      */
@@ -168,7 +190,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
     /**
      * 处于分段录制模式下的视频的文件列表
      */
-    private final ArrayList<String> mVideoPaths = new ArrayList<>();
+    public final ArrayList<String> mVideoPaths = new ArrayList<>();
     /**
      * 处于分段录制模式下的视频的时间列表
      */
@@ -210,10 +232,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
      * 编辑当前图片的监听
      */
     private EditListener mEditListener;
-    /**
-     * 按钮的监听
-     */
-    private ClickOrLongListener mClickOrLongListener;
+
     /**
      * 确认跟返回的监听
      */
@@ -222,6 +241,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
      * 拍摄后操作图片的事件
      */
     private CaptureListener mCaptureListener;
+    public MainActivity mMainActivity;
     private Fragment mFragment;
 
 
@@ -241,21 +261,16 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
     }
 
     /**
-     * 核心按钮事件
-     *
-     * @param clickOrLongListener 事件
-     */
-    public void setPhotoVideoListener(ClickOrLongListener clickOrLongListener) {
-        this.mClickOrLongListener = clickOrLongListener;
-    }
-
-    /**
      * 确认跟返回的监听
      *
      * @param operateCameraListener 事件
      */
     public void setOperateCameraListener(OperateCameraListener operateCameraListener) {
         this.mOperateCameraListener = operateCameraListener;
+    }
+
+    public OperateCameraListener getOperateCameraListener() {
+        return mOperateCameraListener;
     }
 
     /**
@@ -285,6 +300,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
     public CameraLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
+        mCameraStateManagement = new CameraStateManagement(this);
         initData();
         initView();
         initListener();
@@ -300,16 +316,17 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
         // 设置图片路径
         if (mGlobalSpec.pictureStrategy != null) {
             // 如果设置了视频的文件夹路径，就使用它的
-            mPictureMediaStoreCompat = new MediaStoreCompat(getContext(), mGlobalSpec.pictureStrategy);
+            mPictureMediaStoreCompat = new MediaStoreCompat(getContext(),mGlobalSpec.pictureStrategy);
         } else {
             // 否则使用全局的
             if (mGlobalSpec.saveStrategy == null) {
                 throw new RuntimeException("Don't forget to set SaveStrategy.");
             } else {
-                mPictureMediaStoreCompat = new MediaStoreCompat(getContext(), mGlobalSpec.saveStrategy);
+                mPictureMediaStoreCompat = new MediaStoreCompat(getContext(),mGlobalSpec.saveStrategy);
             }
         }
-        mVideoMediaStoreCompat = new MediaStoreCompat(getContext(), mGlobalSpec.videoStrategy == null ? mGlobalSpec.saveStrategy : mGlobalSpec.videoStrategy);
+        mVideoMediaStoreCompat = new MediaStoreCompat(getContext(),
+                mGlobalSpec.videoStrategy == null ? mGlobalSpec.saveStrategy : mGlobalSpec.videoStrategy);
 
         // 默认图片
         TypedArray ta = mContext.getTheme().obtainStyledAttributes(
@@ -320,9 +337,11 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
     /**
      * 初始化
      *
-     * @param fragment 设置fragment
+     * @param mainActivity {@link com.zhongjh.albumcamerarecorder.MainActivity }
+     * @param fragment     设置fragment
      */
-    public void init(CameraFragment fragment) {
+    public void init(MainActivity mainActivity, CameraFragment fragment) {
+        this.mMainActivity = mainActivity;
         this.mFragment = fragment;
 
         // 初始化多图适配器，先判断是不是多图配置
@@ -380,27 +399,33 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
      */
     private void initPvLayoutButtonFeatures() {
         // 判断点击和长按的权限
-        if (mCameraSpec.onlySupportImages()) {
+        if (mCameraSpec.isClickRecord) {
             // 禁用长按功能
-            mViewHolder.pvLayout.setButtonFeatures(BUTTON_STATE_ONLY_CLICK);
-            mViewHolder.pvLayout.setTip(getResources().getString(R.string.z_multi_library_light_touch_take));
-        } else if (mCameraSpec.onlySupportVideos()) {
-            // 禁用点击功能
-            mViewHolder.pvLayout.setButtonFeatures(BUTTON_STATE_ONLY_LONG_CLICK);
-            mViewHolder.pvLayout.setTip(getResources().getString(R.string.z_multi_library_long_press_camera));
+            mViewHolder.pvLayout.setButtonFeatures(BUTTON_STATE_CLICK_AND_HOLD);
+            mViewHolder.pvLayout.setTip(getResources().getString(R.string.z_multi_library_light_touch_camera));
         } else {
-            // 支持所有，不过要判断数量
-            if (SelectableUtils.getImageMaxCount() == 0) {
-                // 禁用点击功能
-                mViewHolder.pvLayout.setButtonFeatures(BUTTON_STATE_ONLY_LONG_CLICK);
-                mViewHolder.pvLayout.setTip(getResources().getString(R.string.z_multi_library_long_press_camera));
-            } else if (SelectableUtils.getVideoMaxCount() == 0) {
+            if (mCameraSpec.onlySupportImages()) {
                 // 禁用长按功能
                 mViewHolder.pvLayout.setButtonFeatures(BUTTON_STATE_ONLY_CLICK);
                 mViewHolder.pvLayout.setTip(getResources().getString(R.string.z_multi_library_light_touch_take));
+            } else if (mCameraSpec.onlySupportVideos()) {
+                // 禁用点击功能
+                mViewHolder.pvLayout.setButtonFeatures(BUTTON_STATE_ONLY_LONG_CLICK);
+                mViewHolder.pvLayout.setTip(getResources().getString(R.string.z_multi_library_long_press_camera));
             } else {
-                mViewHolder.pvLayout.setButtonFeatures(BUTTON_STATE_BOTH);
-                mViewHolder.pvLayout.setTip(getResources().getString(R.string.z_multi_library_light_touch_take_long_press_camera));
+                // 支持所有，不过要判断数量
+                if (SelectableUtils.getImageMaxCount() == 0) {
+                    // 禁用点击功能
+                    mViewHolder.pvLayout.setButtonFeatures(BUTTON_STATE_ONLY_LONG_CLICK);
+                    mViewHolder.pvLayout.setTip(getResources().getString(R.string.z_multi_library_long_press_camera));
+                } else if (SelectableUtils.getVideoMaxCount() == 0) {
+                    // 禁用长按功能
+                    mViewHolder.pvLayout.setButtonFeatures(BUTTON_STATE_ONLY_CLICK);
+                    mViewHolder.pvLayout.setTip(getResources().getString(R.string.z_multi_library_light_touch_take));
+                } else {
+                    mViewHolder.pvLayout.setButtonFeatures(BUTTON_STATE_BOTH);
+                    mViewHolder.pvLayout.setTip(getResources().getString(R.string.z_multi_library_light_touch_take_long_press_camera));
+                }
             }
         }
     }
@@ -438,13 +463,23 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
     }
 
     /**
+     * 返回true的时候即是纸条跳过了后面的ActivityResult事件
+     *
+     * @param resultCode Activity的返回码
+     * @return 返回true是跳过，返回false则是继续
+     */
+    public boolean onActivityResult(int resultCode) {
+        return mCameraStateManagement.onActivityResult(resultCode);
+    }
+
+    /**
      * 生命周期onResume
      */
     public void onResume() {
         LogUtil.i("CameraLayout onResume");
-        // 重置状态
-        resetState(TYPE_DEFAULT);
+        // 清空进度，防止正在进度中突然按home键
         mViewHolder.pvLayout.viewHolder.btnClickOrLong.reset();
+        // 重置当前按钮的功能
         initPvLayoutButtonFeatures();
         mViewHolder.cameraView.open();
     }
@@ -532,84 +567,42 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
         mViewHolder.pvLayout.setPhotoVideoListener(new ClickOrLongListener() {
             @Override
             public void actionDown() {
-                if (mClickOrLongListener != null) {
-                    mClickOrLongListener.actionDown();
-                }
+                Log.d(TAG, "pvLayout actionDown");
+                // 母窗体隐藏底部滑动
+                ViewBusinessUtils.setTabLayoutScroll(false, mMainActivity, mViewHolder.pvLayout);
             }
 
-            @SuppressLint("ClickableViewAccessibility")
             @Override
             public void onClick() {
-                // 开启才能执行别的事件, 如果已经有分段视频，则不允许拍照了
-                if (mViewHolder.cameraView.isOpened() && mVideoTimes.size() <= 0) {
-                    // 判断数量
-                    if (mPhotoAdapter.getItemCount() < currentMaxSelectable()) {
-                        // 设置不能点击，防止多次点击报错
-                        mViewHolder.rlMain.setChildClickable(false);
-                        mViewHolder.cameraView.takePictureSnapshot();
-                        if (mClickOrLongListener != null) {
-                            mClickOrLongListener.onClick();
-                        }
-                    } else {
-                        Toast.makeText(mContext, getResources().getString(R.string.z_multi_library_the_camera_limit_has_been_reached), Toast.LENGTH_SHORT).show();
-                    }
-                }
+                Log.d(TAG, "pvLayout onClick");
+                takePhoto();
             }
 
             @Override
             public void onLongClickShort(final long time) {
-                Log.d(TAG, "onLongClickShort " + time);
-                // 提示过短
-                mViewHolder.pvLayout.setTipAlphaAnimation(getResources().getString(R.string.z_multi_library_the_recording_time_is_too_short));
-                setSwitchVisibility(VISIBLE);
-                mViewHolder.imgFlash.setVisibility(VISIBLE);
-                postDelayed(() -> stopRecord(true), mCameraSpec.minDuration - time);
-                // 如果是分段录制情况中，则回滚上一个进度
-                if (mIsSectionRecord) {
-                    mViewHolder.pvLayout.getViewHolder().btnClickOrLong.selectionRecordRollBack();
-                }
-                if (mClickOrLongListener != null) {
-                    mClickOrLongListener.onLongClickShort(time);
-                }
+                Log.d(TAG, "pvLayout onLongClickShort");
+                longClickShort(time);
             }
 
             @Override
             public void onLongClick() {
-                // 开启才能执行别的事件
-                if (mViewHolder.cameraView.isOpened()) {
-                    // 用于播放的视频file
-                    if (mVideoFile == null) {
-                        mVideoFile = mVideoMediaStoreCompat.createFile(1, true);
-                    }
-                    mViewHolder.cameraView.takeVideoSnapshot(mVideoFile);
-                    setState(STATE_VIDEO_IN);
-                    // 开始录像
-                    setSwitchVisibility(INVISIBLE);
-                    mViewHolder.imgFlash.setVisibility(INVISIBLE);
-                    if (mClickOrLongListener != null) {
-                        mClickOrLongListener.onLongClick();
-                    }
-                }
+                Log.d(TAG, "pvLayout onLongClick ");
+                recordVideo();
             }
 
             @Override
             public void onLongClickEnd(long time) {
-                Log.d(TAG, "onLongClickEnd " + time);
+                Log.d(TAG, "pvLayout onLongClickEnd " + time);
                 mSectionRecordTime = time;
                 // 录像结束
                 stopRecord(false);
-                if (mClickOrLongListener != null) {
-                    mClickOrLongListener.onLongClickEnd(time);
-                }
             }
 
             @Override
             public void onLongClickError() {
+                Log.d(TAG, "pvLayout onLongClickError ");
                 if (mErrorListener != null) {
                     mErrorListener.onAudioPermissionError();
-                }
-                if (mClickOrLongListener != null) {
-                    mClickOrLongListener.onLongClickError();
                 }
             }
 
@@ -621,7 +614,69 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
                             Toast.LENGTH_SHORT).show();
                 }
             }
+
+            @Override
+            public void onClickStopTips() {
+                if (mIsSectionRecord) {
+                    mViewHolder.pvLayout.setTipAlphaAnimation(getResources().getString(R.string.z_multi_library_touch_your_suspension));
+                } else {
+                    mViewHolder.pvLayout.setTipAlphaAnimation(getResources().getString(R.string.z_multi_library_touch_your_end));
+                }
+            }
         });
+    }
+
+    /**
+     * 拍照
+     */
+    private void takePhoto() {
+        // 开启才能执行别的事件, 如果已经有分段视频，则不允许拍照了
+        if (mViewHolder.cameraView.isOpened() && mVideoTimes.size() <= 0) {
+            // 判断数量
+            if (mPhotoAdapter.getItemCount() < currentMaxSelectable()) {
+                // 设置不能点击，防止多次点击报错
+                mViewHolder.rlMain.setChildClickable(false);
+                mViewHolder.cameraView.takePictureSnapshot();
+            } else {
+                Toast.makeText(mContext, getResources().getString(R.string.z_multi_library_the_camera_limit_has_been_reached), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    /**
+     * 录制视频
+     */
+    private void recordVideo() {
+        // 开启才能执行别的事件
+        if (mViewHolder.cameraView.isOpened()) {
+            // 用于播放的视频file
+            if (mVideoFile == null) {
+                mVideoFile = mVideoMediaStoreCompat.createFile(1, true);
+            }
+            mViewHolder.cameraView.takeVideoSnapshot(mVideoFile);
+            // 设置录制状态
+            if (mIsSectionRecord) {
+                mCameraStateManagement.setState(mCameraStateManagement.getVideoMultipleIn());
+            } else {
+                mCameraStateManagement.setState(mCameraStateManagement.getVideoIn());
+            }
+            // 开始录像
+            setMenuVisibility(INVISIBLE);
+        }
+    }
+
+    /**
+     * 录制时间过短
+     */
+    private void longClickShort(final long time) {
+        Log.d(TAG, "longClickShort " + time);
+        mCameraStateManagement.longClickShort(time);
+        // 提示过短
+        mViewHolder.pvLayout.setTipAlphaAnimation(getResources().getString(R.string.z_multi_library_the_recording_time_is_too_short));
+        // 显示右上角菜单
+        setMenuVisibility(VISIBLE);
+        // 停止录像
+        postDelayed(() -> stopRecord(true), mCameraSpec.minDuration - time);
     }
 
     /**
@@ -636,7 +691,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
 
             @Override
             public void confirm() {
-                pvLayoutCommit();
+                mCameraStateManagement.pvLayoutCommit();
             }
 
             @Override
@@ -647,14 +702,16 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
                     mCameraSpec.videoEditCoordinator.merge(mNewSectionVideoPath, mVideoPaths,
                             mContext.getCacheDir().getPath() + File.separator + "cam.txt");
                 } else {
-                    pvLayoutCommit();
+                    mCameraStateManagement.pvLayoutCommit();
                 }
             }
 
             @Override
             public void stopProgress() {
+                // 重置按钮
+                mViewHolder.pvLayout.resetBtnConfirm();
                 if (mCameraSpec.videoEditCoordinator != null) {
-                    mCameraSpec.videoEditCoordinator.onMergeDestroy();
+                    mCameraSpec.videoEditCoordinator.onMergeDispose();
                 }
             }
 
@@ -702,7 +759,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
                 }
 
                 @Override
-                public void onError(String message) {
+                public void onError(@NotNull String message) {
                     Log.d(TAG, "onError" + message);
                 }
             });
@@ -719,7 +776,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
             public void onPictureTaken(@NonNull PictureResult result) {
                 result.toBitmap(bitmap -> {
                     // 显示图片
-                    addCaptureDatas(bitmap);
+                    addCaptureData(bitmap);
                     // 恢复点击
                     mViewHolder.rlMain.setChildClickable(true);
                 });
@@ -731,11 +788,10 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
                 Log.d(TAG, "onVideoTaken");
                 super.onVideoTaken(result);
                 // 判断是否短时间结束
-                if (!mIsShort) {
+                if (!mIsShort && !isBreakOff()) {
                     if (!mIsSectionRecord) {
                         //  如果录制结束，打开该视频。打开底部菜单
                         PreviewVideoActivity.startActivity(mFragment, result.getFile().getPath());
-                        mFragment.getActivity().overridePendingTransition(R.anim.activity_open, 0);
                         Log.d(TAG, "onVideoTaken " + result.getFile().getPath());
                     } else {
                         Log.d(TAG, "onVideoTaken 分段录制 " + result.getFile().getPath());
@@ -760,8 +816,9 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
                 } else {
                     Log.d(TAG, "onVideoTaken delete " + mVideoFile.getPath());
                     FileUtil.deleteFile(mVideoFile);
-                    mIsShort = false;
                 }
+                mIsShort = false;
+                setBreakOff(false);
                 mViewHolder.pvLayout.setEnabled(true);
             }
 
@@ -797,6 +854,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
     private void initImgCloseListener() {
         mViewHolder.imgClose.setOnClickListener(v -> {
             if (mCloseListener != null) {
+                setBreakOff(true);
                 mCloseListener.onClose();
             }
         });
@@ -851,160 +909,93 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
     /**
      * 取消核心事件
      */
-    private synchronized void pvLayoutCancel() {
-        // 判断是不是分段录制并且超过1个视频
-        if (mIsSectionRecord && mVideoPaths.size() >= 1) {
-            // 每次删除，后面都要重新合成,新合成的也删除
-            mViewHolder.pvLayout.setProgressMode(true);
-            mViewHolder.pvLayout.resetConfim();
-            if (mNewSectionVideoPath != null) {
-                FileUtil.deleteFile(mNewSectionVideoPath);
-            }
-            // 删除最后一个视频和视频文件
-            FileUtil.deleteFile(mVideoPaths.get(mVideoPaths.size() - 1));
-            mVideoPaths.remove(mVideoPaths.size() - 1);
-            mVideoTimes.remove(mVideoTimes.size() - 1);
+    private void pvLayoutCancel() {
+        mCameraStateManagement.pvLayoutCancel();
+    }
 
-            // 显示当前进度
-            mViewHolder.pvLayout.setData(mVideoTimes);
-            mViewHolder.pvLayout.invalidateClickOrLongButton();
-            if (mVideoPaths.size() == 0) {
-                cancelOnReset();
-            }
-        } else {
-            // 清空图片资源
-            mBitmapData.clear();
-            mCaptureDatas.clear();
-            // 重置ui
-            cancelOnReset();
+    /**
+     * 删除视频 - 多个模式
+     */
+    public void removeVideoMultiple() {
+        // 每次删除，后面都要重新合成,新合成的也删除
+        mViewHolder.pvLayout.setProgressMode(true);
+        mViewHolder.pvLayout.resetConfim();
+        if (mNewSectionVideoPath != null) {
+            FileUtil.deleteFile(mNewSectionVideoPath);
+        }
+        // 删除最后一个视频和视频文件
+        FileUtil.deleteFile(mVideoPaths.get(mVideoPaths.size() - 1));
+        mVideoPaths.remove(mVideoPaths.size() - 1);
+        mVideoTimes.remove(mVideoTimes.size() - 1);
+
+        // 显示当前进度
+        mViewHolder.pvLayout.setData(mVideoTimes);
+        mViewHolder.pvLayout.invalidateClickOrLongButton();
+        if (mVideoPaths.size() == 0) {
+            mCameraStateManagement.resetState();
         }
     }
 
     /**
-     * 提交核心事件
+     * 取消单图后的重置
      */
-    private synchronized void pvLayoutCommit() {
-        if (mIsSectionRecord && mVideoPaths.size() >= 1) {
-            // 打开新的界面预览视频
-            PreviewVideoActivity.startActivity(mFragment, mNewSectionVideoPath);
-            mFragment.getActivity().overridePendingTransition(R.anim.activity_open, 0);
-        } else {
-            // 根据不同状态处理相应的事件
-            if (getState() == Constants.STATE_PICTURE) {
-                // 图片模式的提交
-                confirmState(TYPE_PICTURE);
-                // 设置空闲状态
-                setState(Constants.STATE_PREVIEW);
-            } else if (getState() == Constants.STATE_VIDEO) {
-                confirmState(TYPE_VIDEO);
-                // 设置空闲状态
-                setState(Constants.STATE_PREVIEW);
-            } else if (getState() == Constants.STATE_PICTURE_PREVIEW) {
-                // 图片模式的提交
-                confirmState(TYPE_PICTURE);
-            }
-        }
+    public void cancelOnResetBySinglePicture() {
+        mBitmapData.clear();
+        mCaptureDatas.clear();
+
+        // 根据不同状态处理相应的事件,多图不需要取消事件（关闭所有图片就自动恢复了）。
+        resetStateAll();
     }
 
     /**
-     * 取消后的重置相关
+     * 结束所有当前活动，重置状态
+     * 一般指完成了当前活动，或者清除所有活动的时候调用
      */
-    private void cancelOnReset() {
-        // 如果启动视频编辑并且可录制数量>=0，便显示分段录制功能
+    public void resetStateAll() {
+        // 重置右上角菜单
+        setMenuVisibility(VISIBLE);
+
+        // 重置分段录制按钮 如果启动视频编辑并且可录制数量>=0，便显示分段录制功能
         if (SelectableUtils.getVideoMaxCount() <= 0 || mCameraSpec.videoEditCoordinator == null) {
             mViewHolder.pvLayout.getViewHolder().tvSectionRecord.setVisibility(View.GONE);
         } else {
             mViewHolder.pvLayout.getViewHolder().tvSectionRecord.setVisibility(View.VISIBLE);
         }
 
-        // 根据不同状态处理相应的事件,多图不需要取消事件（关闭所有图片就自动恢复了）。
-        if (getState() == Constants.STATE_PICTURE) {
-            // 针对图片模式进行的重置
-            resetState(TYPE_PICTURE);
-            mViewHolder.pvLayout.reset();
-            // 设置空闲状态
-            setState(Constants.STATE_PREVIEW);
-        } else if (getState() == Constants.STATE_VIDEO) {
-            // 针对arm64-v8a视频模式进行的重置
-            resetState(TYPE_VIDEO);
-            mViewHolder.pvLayout.reset();
-            // 设置空闲状态
-            setState(Constants.STATE_PREVIEW);
-        }
+        // 恢复底部
+        showBottomMenu();
+
+        // 隐藏大图
+        mViewHolder.flShow.setVisibility(View.GONE);
+
+        // 隐藏编辑按钮
+        mViewHolder.rlEdit.setVisibility(View.GONE);
+
+        // 恢复底部按钮
+        mViewHolder.pvLayout.reset();
+    }
+
+    /**
+     * 恢复底部菜单
+     */
+    public void showBottomMenu() {
         if (mOperateCameraListener != null) {
             mOperateCameraListener.cancel();
         }
-
-        mViewHolder.rlEdit.setVisibility(View.GONE);
     }
 
     /**
-     * 针对当前状态重新设置状态
-     *
-     * @param type 类型
+     * 打开预览视频界面
      */
-    private void resetState(int type) {
-        switch (type) {
-            case TYPE_VIDEO:
-                // 取消视频删除文件
-                FileUtil.deleteFile(mVideoFile);
-                break;
-            case TYPE_PICTURE:
-                // 隐藏图片view
-                if (!mViewHolder.cameraView.isOpened()) {
-                    mViewHolder.cameraView.open();
-                }
-                mViewHolder.imgPhoto.setVisibility(INVISIBLE);
-                mViewHolder.flShow.setVisibility(INVISIBLE);
-                if (mPhotoFile != null) {
-                    // 删除图片
-                    FileUtil.deleteFile(mPhotoFile);
-                }
-                mViewHolder.pvLayout.getViewHolder().btnClickOrLong.setVisibility(View.VISIBLE);
-                break;
-            case TYPE_SHORT:
-                // 短视屏停止录像并删除文件
-                mIsShort = true;
-                mViewHolder.cameraView.stopVideo();
-                break;
-            case TYPE_DEFAULT:
-            default:
-                break;
-        }
-        setSwitchVisibility(VISIBLE);
-        mViewHolder.imgFlash.setVisibility(VISIBLE);
-    }
-
-    /**
-     * 确认数据
-     *
-     * @param type 类型
-     */
-    private void confirmState(int type) {
-        switch (type) {
-            case TYPE_VIDEO:
-                // TODO 弃用，已经改用跳转到第二个界面播放视频了
-                break;
-            case TYPE_PICTURE:
-                setUiEnableFalse();
-                // 拍照完成
-                if (mOperateCameraListener != null) {
-                    // 移动文件
-                    movePictureFile();
-                }
-                break;
-            case TYPE_SHORT:
-            case TYPE_DEFAULT:
-            default:
-                break;
-        }
+    public void openPreviewVideoActivity() {
+        PreviewVideoActivity.startActivity(mFragment, mNewSectionVideoPath);
     }
 
     /**
      * 迁移图片文件，缓存文件迁移到配置目录
      * 在 doInBackground 线程里面也执行了 runOnUiThread 跳转UI的最终事件
      */
-    private void movePictureFile() {
+    public void movePictureFile() {
         // 执行等待动画
         mViewHolder.pvLayout.getViewHolder().btnConfirm.setProgress(1);
         // 开始迁移文件
@@ -1080,7 +1071,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
      *
      * @param bitmap bitmap
      */
-    private void addCaptureDatas(Bitmap bitmap) {
+    private void addCaptureData(Bitmap bitmap) {
         // 初始化数据并且存储进file
         File file = mPictureMediaStoreCompat.saveFileByBitmap(bitmap, true);
         Uri uri = mPictureMediaStoreCompat.getUri(file.getPath());
@@ -1116,8 +1107,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
      */
     private void showSinglePicture(BitmapData bitmapData, File file, Uri uri) {
         // 拍照  隐藏 闪光灯、右上角的切换摄像头
-        setSwitchVisibility(INVISIBLE);
-        mViewHolder.imgFlash.setVisibility(INVISIBLE);
+        setMenuVisibility(View.INVISIBLE);
         // 如果只有单个图片，就显示相应的提示结果等等
         mViewHolder.imgPhoto.canScroll();
         mViewHolder.imgPhoto.setVisibility(VISIBLE);
@@ -1129,7 +1119,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
         mPhotoFile = file;
 
         // 设置当前模式是图片模式
-        setState(Constants.STATE_PICTURE);
+        mCameraStateManagement.setState(mCameraStateManagement.getPictureComplete());
 
         // 判断是否要编辑
         if (mGlobalSpec.isImageEdit) {
@@ -1164,11 +1154,10 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
         // 重置按钮，因为每次点击，都会自动关闭
         mViewHolder.pvLayout.getViewHolder().btnClickOrLong.resetState();
         // 显示右上角
-        setSwitchVisibility(View.VISIBLE);
-        mViewHolder.imgFlash.setVisibility(View.VISIBLE);
+        setMenuVisibility(View.VISIBLE);
 
         // 设置当前模式是图片休闲并存模式
-        setState(Constants.STATE_PICTURE_PREVIEW);
+        mCameraStateManagement.setState(mCameraStateManagement.getPictureMultiple());
 
         // 禁用长按事件，即禁止录像
         mViewHolder.pvLayout.setButtonFeatures(BUTTON_STATE_ONLY_CLICK);
@@ -1179,17 +1168,8 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
      *
      * @return 状态
      */
-    private int getState() {
-        return mState;
-    }
-
-    /**
-     * 设置当前view的状态
-     *
-     * @param state 状态
-     */
-    private void setState(int state) {
-        this.mState = state;
+    public StateInterface getState() {
+        return mCameraStateManagement.getState();
     }
 
     /**
@@ -1253,25 +1233,20 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
     }
 
     /**
-     * 调用停止录像
+     * 停止录像并且完成它，如果是因为视频过短则清除冗余数据
      *
      * @param isShort 是否因为视频过短而停止
      */
-    private void stopRecord(boolean isShort) {
-        Log.d(TAG, "stopRecord " + isShort);
-        mIsShort = isShort;
-        mViewHolder.cameraView.stopVideo();
-        if (isShort) {
-            // 如果视频过短就是录制不成功
-            resetState(TYPE_SHORT);
-            // 判断不是分段录制 并且 没有分段录制片段
-            if (!mIsSectionRecord && mVideoPaths.size() <= 0) {
-                mViewHolder.pvLayout.reset();
-            }
-        } else {
-            // 设置成视频播放状态
-            setState(Constants.STATE_VIDEO);
-        }
+    public void stopRecord(boolean isShort) {
+        mCameraStateManagement.stopRecord(isShort);
+    }
+
+    /**
+     * 设置右上角菜单是否显示
+     */
+    public void setMenuVisibility(int viewVisibility) {
+        setSwitchVisibility(viewVisibility);
+        mViewHolder.imgFlash.setVisibility(viewVisibility);
     }
 
     /**
@@ -1301,7 +1276,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
      * 设置界面的功能按钮禁止使用
      * 场景：确认图片时，压缩中途禁止某些功能使用
      */
-    private void setUiEnableFalse() {
+    public void setUiEnableFalse() {
         mViewHolder.imgFlash.setEnabled(false);
         mViewHolder.imgSwitch.setEnabled(false);
         mViewHolder.pvLayout.setEnabled(false);
@@ -1338,7 +1313,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
             initPvLayoutButtonFeatures();
 
             // 设置空闲状态
-            setState(Constants.STATE_PREVIEW);
+            mCameraStateManagement.setState(mCameraStateManagement.getPreview());
 
             // 如果是单图编辑情况下
             mViewHolder.rlEdit.setVisibility(View.GONE);
@@ -1349,8 +1324,8 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
 
         View rootView;
         ChildClickableFrameLayout rlMain;
-        ImageViewTouch imgPhoto;
-        FrameLayout flShow;
+        public ImageViewTouch imgPhoto;
+        public FrameLayout flShow;
         public ImageView imgFlash;
         public ImageView imgSwitch;
         public PhotoVideoLayoutBase pvLayout;
@@ -1359,7 +1334,7 @@ public class CameraLayout extends RelativeLayout implements PhotoAdapterListener
         View vLine2;
         View vLine3;
         ImageView imgClose;
-        CameraView cameraView;
+        public CameraView cameraView;
         ConstraintLayout clMenu;
         RelativeLayout rlEdit;
 

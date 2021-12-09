@@ -20,8 +20,6 @@ import com.zhongjh.albumcamerarecorder.album.model.SelectedItemCollection;
 import com.zhongjh.albumcamerarecorder.preview.BasePreviewActivity;
 import com.zhongjh.albumcamerarecorder.recorder.db.RecordingItem;
 import com.zhongjh.albumcamerarecorder.settings.MultiMediaSetting;
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
 import com.zhongjh.progresslibrary.entity.MultiMediaView;
 import com.zhongjh.progresslibrary.widget.MaskProgressLayout;
 
@@ -32,6 +30,8 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.zhongjh.common.entity.MultiMedia;
+import com.zhongjh.common.enums.MultimediaTypes;
 
 /**
  * 父类，包含下面几部分操作：

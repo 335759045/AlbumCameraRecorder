@@ -22,10 +22,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import gaode.zhongjh.com.common.listener.VideoEditListener;
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.StatusBarUtils;
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.ThreadUtils;
+import com.zhongjh.common.listener.VideoEditListener;
+import com.zhongjh.common.utils.MediaStoreCompat;
+import com.zhongjh.common.utils.StatusBarUtils;
+import com.zhongjh.common.utils.ThreadUtils;
 
 import static com.zhongjh.albumcamerarecorder.camera.common.Constants.TYPE_VIDEO;
 import static com.zhongjh.albumcamerarecorder.constants.Constant.REQUEST_CODE_PREVIEW_VIDEO;
@@ -70,6 +70,7 @@ public class PreviewVideoActivity extends AppCompatActivity {
         intent.putExtra("path", path);
         intent.setClass(fragment.getContext(), PreviewVideoActivity.class);
         fragment.startActivityForResult(intent, REQUEST_CODE_PREVIEW_VIDEO);
+        fragment.getActivity().overridePendingTransition(R.anim.activity_open, 0);
     }
 
     @Override
@@ -94,10 +95,10 @@ public class PreviewVideoActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (mCameraSpec.videoEditCoordinator != null) {
             mCameraSpec.videoEditCoordinator.onCompressDestroy();
         }
+        super.onDestroy();
     }
 
     /**
@@ -127,7 +128,7 @@ public class PreviewVideoActivity extends AppCompatActivity {
     private void initData() {
         // 公共配置
         GlobalSpec mGlobalSpec = GlobalSpec.getInstance();
-        mVideoMediaStoreCompat = new MediaStoreCompat(PreviewVideoActivity.this.getApplicationContext(),
+        mVideoMediaStoreCompat = new MediaStoreCompat(PreviewVideoActivity.this,
                 mGlobalSpec.videoStrategy == null ? mGlobalSpec.saveStrategy : mGlobalSpec.videoStrategy);
 
         mFile = new File(mPath);
@@ -254,8 +255,7 @@ public class PreviewVideoActivity extends AppCompatActivity {
     private void confirm(File newFile) {
         Intent intent = new Intent();
         // 加入视频到android系统库里面
-        Uri mediaUri = BitmapUtils.displayToGallery(getApplicationContext(), newFile, TYPE_VIDEO, mDuration,
-                mVideoMediaStoreCompat.getSaveStrategy().getDirectory(), mVideoMediaStoreCompat);
+        Uri mediaUri = BitmapUtils.displayToGallery(getApplicationContext(), newFile, TYPE_VIDEO, mDuration, mVideoMediaStoreCompat.getSaveStrategy().getDirectory(), mVideoMediaStoreCompat);
         intent.putExtra("path", newFile.getPath());
         intent.putExtra("uri", mediaUri);
         setResult(RESULT_OK, intent);

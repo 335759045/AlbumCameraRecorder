@@ -14,7 +14,6 @@ import com.zhongjh.albumcamerarecorder.settings.CameraSetting;
 import com.zhongjh.albumcamerarecorder.settings.GlobalSetting;
 import com.zhongjh.albumcamerarecorder.settings.MultiMediaSetting;
 import com.zhongjh.albumcamerarecorder.settings.RecorderSetting;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
 import com.zhongjh.cameraapp.R;
 import com.zhongjh.cameraapp.configuration.Glide4Engine;
 import com.zhongjh.cameraapp.databinding.ActivityMainSuperSimpleBinding;
@@ -27,7 +26,8 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
+import com.zhongjh.common.entity.SaveStrategy;
+import com.zhongjh.common.enums.MimeType;
 
 /**
  * 这是一个超级简单代码就完成的示例

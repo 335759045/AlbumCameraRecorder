@@ -2,11 +2,11 @@ package com.zhongjh.albumcamerarecorder.settings;
 
 import com.zhongjh.albumcamerarecorder.R;
 
-import gaode.zhongjh.com.common.coordinator.VideoEditCoordinator;
+import com.zhongjh.common.coordinator.VideoEditCoordinator;
+import com.zhongjh.common.enums.MimeType;
 
 import com.zhongjh.albumcamerarecorder.camera.listener.OnCameraViewListener;
 import com.zhongjh.albumcamerarecorder.constants.ModuleTypes;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
 
 import java.util.Set;
 
@@ -92,8 +92,10 @@ public class CameraSpec {
      * 水印资源id
      */
     public int watermarkResource = -1;
-
-
+    /**
+     * 是否点击即录制（点击拍摄图片功能则失效）
+     */
+    public boolean isClickRecord;
     /**
      * 仅支持图片
      */

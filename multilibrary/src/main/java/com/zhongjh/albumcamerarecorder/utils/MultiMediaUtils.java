@@ -1,9 +1,10 @@
 package com.zhongjh.albumcamerarecorder.utils;
 
 import com.zhongjh.albumcamerarecorder.album.widget.CheckView;
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
 
 import java.util.List;
+
+import com.zhongjh.common.entity.MultiMedia;
 
 /**
  * @author zhongjh

@@ -9,7 +9,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.zhongjh.albumcamerarecorder.R;
 
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.ColorFilterUtil;
+import com.zhongjh.common.utils.ColorFilterUtil;
 
 /**
  * 单选框

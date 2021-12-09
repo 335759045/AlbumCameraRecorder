@@ -13,16 +13,17 @@ import android.util.Log;
 
 import com.zhongjh.albumcamerarecorder.R;
 
+import com.zhongjh.common.entity.IncapableCause;
 
 import com.zhongjh.albumcamerarecorder.album.filter.BaseFilter;
 import com.zhongjh.albumcamerarecorder.settings.AlbumSpec;
 import com.zhongjh.albumcamerarecorder.settings.GlobalSpec;
 
+import com.zhongjh.common.entity.MultiMedia;
+import com.zhongjh.common.enums.MimeType;
+import com.zhongjh.common.utils.BasePhotoMetadataUtils;
+
 import com.zhongjh.albumcamerarecorder.constants.ModuleTypes;
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.IncapableCause;
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.BasePhotoMetadataUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

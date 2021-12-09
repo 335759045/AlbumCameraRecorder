@@ -19,13 +19,11 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.zhongjh.albumcamerarecorder.R;
 import com.zhongjh.albumcamerarecorder.camera.listener.ClickOrLongListener;
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.DisplayMetricsUtils;
 
 import java.util.ArrayList;
 
-import static com.zhongjh.albumcamerarecorder.camera.common.Constants.BUTTON_STATE_BOTH;
-import static com.zhongjh.albumcamerarecorder.camera.common.Constants.BUTTON_STATE_ONLY_CLICK;
-import static com.zhongjh.albumcamerarecorder.camera.common.Constants.BUTTON_STATE_ONLY_LONG_CLICK;
+import com.zhongjh.common.utils.DisplayMetricsUtils;
+
 
 /**
  * 点击或者长按的按钮
@@ -35,6 +33,23 @@ import static com.zhongjh.albumcamerarecorder.camera.common.Constants.BUTTON_STA
 public class ClickOrLongButton extends View {
 
     private static final String TAG = "ClickOrLongButton";
+    /**
+     * 按钮只能点击
+     */
+    public static final int BUTTON_STATE_ONLY_CLICK = 0x201;
+    /**
+     * 按钮只能长按
+     */
+    public static final int BUTTON_STATE_ONLY_LONG_CLICK = 0x202;
+    /**
+     * 按钮点击或者长按两者都可以
+     */
+    public static final int BUTTON_STATE_BOTH = 0x203;
+    /**
+     * 按钮点击即是长按模式
+     */
+    public static final int BUTTON_STATE_CLICK_AND_HOLD = 0x204;
+
     /**
      * 满进度
      */
@@ -133,6 +148,11 @@ public class ClickOrLongButton extends View {
     private long btnPressTime;
     private int outBlackCircleRadiusInc;
     /**
+     * 为了确保整个按钮的逻辑从按下-放开手都是流畅的，会用按下+1，放开手+1，最后等于2的方式执行
+     * 如果中间中断或者重置，那就直接减1，就说明
+     */
+    private int step;
+    /**
      * 当前状态
      */
     private int recordState;
@@ -150,7 +170,7 @@ public class ClickOrLongButton extends View {
     private static final int RECORD_ENDED = 2;
 
     /**
-     * 按钮可执行的功能状态（拍照,录制,两者）
+     * 按钮可执行的功能状态（点击,长按,两者,按钮点击即是长按模式）
      */
     private int mButtonState;
     /**
@@ -162,6 +182,15 @@ public class ClickOrLongButton extends View {
     private final TouchTimeHandler.Task updateUITask = new TouchTimeHandler.Task() {
         @Override
         public void run() {
+            // 判断如果是 点击即长按 模式的情况下，判断进度是否>=100
+            if (mButtonState == BUTTON_STATE_CLICK_AND_HOLD) {
+                if (mRecordedTime / timeLimitInMils >= FULL_PROGRESS) {
+                    Log.d(TAG, "满足100" + (mRecordedTime / timeLimitInMils >= FULL_PROGRESS));
+                    step++;
+                    refreshView();
+                    return;
+                }
+            }
             if (mIsSectionMode && mCurrentLocation.size() > 0) {
                 // 当处于分段录制模式并且有分段数据的时候，关闭启动前奏
                 mMInDurationAnimation = 0;
@@ -391,8 +420,6 @@ public class ClickOrLongButton extends View {
         Log.d(TAG, "onDraw percentInDegree" + percentInDegree);
         Log.d(TAG, "onDraw mCurrentSumNumberDegrees" + mCurrentSumNumberDegrees);
 
-        //
-
         // 从这个顺序来看，即是从270为开始
         for (Float item : mCurrentLocation) {
             canvas.drawArc(outMostCircleRect, item, 3, false, outProcessIntervalCirclePaint);
@@ -413,31 +440,54 @@ public class ClickOrLongButton extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (mRecordedTime / timeLimitInMils >= FULL_PROGRESS) {
-                    // 进度已满,不执行任何动作
-                    return true;
-                }
-                if (!touchable) {
-                    mClickOrLongListener.onBanClickTips();
-                    return true;
-                }
-                Log.d(TAG, "onTouchEvent: down");
-                // 是否支持长按
-                boolean longClick = mClickOrLongListener != null
-                        && (mButtonState == BUTTON_STATE_ONLY_LONG_CLICK || mButtonState == BUTTON_STATE_BOTH);
-                if (longClick) {
-                    Log.d(TAG, "onTouchEvent: startTicking");
-                    startTicking();
+                if (mButtonState != BUTTON_STATE_CLICK_AND_HOLD) {
+                    if (mRecordedTime / timeLimitInMils >= FULL_PROGRESS) {
+                        // 进度已满,不执行任何动作
+                        return true;
+                    }
+                    if (!touchable) {
+                        mClickOrLongListener.onBanClickTips();
+                        return true;
+                    }
+                    Log.d(TAG, "onTouchEvent: down");
+                    step = 1;
+                    // 是否支持长按
+                    boolean longClick = mClickOrLongListener != null
+                            && (mButtonState == BUTTON_STATE_ONLY_LONG_CLICK ||
+                            mButtonState == BUTTON_STATE_BOTH);
+                    if (longClick) {
+                        Log.d(TAG, "onTouchEvent: startTicking");
+                        startTicking();
+                    }
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                Log.d(TAG, "onTouchEvent: up");
-                reset();
+                if (mButtonState == BUTTON_STATE_CLICK_AND_HOLD) {
+                    // 点击即长按模式
+                    if (recordState != RECORD_STARTED) {
+                        // 未启动状态，即立刻启动长按动画
+                        step = 1;
+                        startTicking();
+                        mClickOrLongListener.onClickStopTips();
+                    } else {
+                        // 已经启动状态，刷新view执行事件
+                        step++;
+                        refreshView();
+                    }
+                } else {
+                    // 其他模式
+                    step++;
+                    Log.d(TAG, "onTouchEvent: up");
+                    refreshView();
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (mRecordedTime / timeLimitInMils >= FULL_PROGRESS) {
-                    reset();
-                    return true;
+                if (mButtonState != BUTTON_STATE_CLICK_AND_HOLD) {
+                    if (mRecordedTime / timeLimitInMils >= FULL_PROGRESS) {
+                        Log.d(TAG, "onTouchEvent: move");
+                        refreshView();
+                        return true;
+                    }
                 }
                 break;
             default:
@@ -447,19 +497,18 @@ public class ClickOrLongButton extends View {
     }
 
     /**
-     * 重置
+     * 刷新view
      */
-    public void reset() {
+    public void refreshView() {
         Log.d(TAG, "reset: " + recordState);
         synchronized (ClickOrLongButton.this) {
             if (recordState == RECORD_STARTED) {
-                if (mClickOrLongListener != null) {
+                if (mClickOrLongListener != null && step == 2) {
                     Log.d(TAG, "时间短的比较：" + mRecordedTime + " " + mMinDuration + " " + mRecordedTimeSection);
                     if (mIsSectionMode && mRecordedTimeSection < mMinDuration) {
                         // 如果处于分段录制并且录制时间过短
                         mClickOrLongListener.onLongClickShort(mRecordedTimeSection);
-                    }
-                    if (mRecordedTime < mMinDuration) {
+                    } else if (mRecordedTime < mMinDuration) {
                         // 回调录制时间过短
                         mClickOrLongListener.onLongClickShort(mRecordedTime);
                     } else {
@@ -473,17 +522,51 @@ public class ClickOrLongButton extends View {
                 recordState = RECORD_NOT_STARTED;
             } else {
                 // 如果只支持长按事件则不触发
-                if (mClickOrLongListener != null && mButtonState != BUTTON_STATE_ONLY_LONG_CLICK) {
+                if (mClickOrLongListener != null &&
+                        mButtonState != BUTTON_STATE_ONLY_LONG_CLICK &&
+                        step == 2) {
                     // 拍照
                     mClickOrLongListener.onClick();
                 }
             }
         }
+        reset();
+    }
+
+    /**
+     * 重置
+     */
+    public void reset() {
+        step = 0;
         mActionDown = false;
         touchTimeHandler.clearMsg();
         percentInDegree = 0.0F;
         mRecordedTime = 0;
         mRecordedTimeOld = 0;
+        mCurrentSumNumberDegreesOld = 0F;
+        centerCirclePaint.setColor(colorWhiteP60);
+        outMostWhiteCirclePaint.setColor(colorRoundBorder);
+        innerCircleRadiusToDraw = mInnerCircleRadius;
+        outMostCircleRect = new RectF(centerX - outMostCircleRadius, centerY - outMostCircleRadius, centerX + outMostCircleRadius, centerY + outMostCircleRadius);
+        translucentCircleRadius = 0;
+        processBarPaint.setStrokeWidth(mOutCircleWidth);
+        outProcessCirclePaint.setStrokeWidth(mOutCircleWidth);
+        outMostWhiteCirclePaint.setStrokeWidth(mOutCircleWidth);
+        outProcessIntervalCirclePaint.setStrokeWidth(mOutCircleWidth);
+        outBlackCircleRadius = (outMostCircleRadius - mOutCircleWidth / 2.0F);
+        outMostBlackCircleRadius = (outMostCircleRadius + mOutCircleWidth / 2.0F);
+        invalidate();
+    }
+
+    /**
+     * 中断当前操作
+     */
+    public void breakOff() {
+        step = 0;
+        mActionDown = false;
+        touchTimeHandler.clearMsg();
+        percentInDegree = 0.0F;
+        mRecordedTime = 0;
         centerCirclePaint.setColor(colorWhiteP60);
         outMostWhiteCirclePaint.setColor(colorRoundBorder);
         innerCircleRadiusToDraw = mInnerCircleRadius;
@@ -615,13 +698,16 @@ public class ClickOrLongButton extends View {
     /**
      * 设置按钮功能（点击和长按）
      *
-     * @param buttonStateBoth {@link com.zhongjh.albumcamerarecorder.camera.common.Constants#BUTTON_STATE_ONLY_CLICK 只能点击
-     * @link com.zhongjh.albumcamerarecorder.camera.common.Constants#BUTTON_STATE_ONLY_LONG_CLICK 只能长按
-     * @link com.zhongjh.albumcamerarecorder.camera.common.Constants#BUTTON_STATE_BOTH 两者皆可
+     * @param buttonStateBoth {@link com.zhongjh.albumcamerarecorder.widget.clickorlongbutton.ClickOrLongButton#BUTTON_STATE_ONLY_CLICK 只能点击
+     * @link com.zhongjh.albumcamerarecorder.widget.clickorlongbutton.ClickOrLongButton#BUTTON_STATE_ONLY_LONG_CLICK 只能长按
+     * @link com.zhongjh.albumcamerarecorder.widget.clickorlongbutton.ClickOrLongButton#BUTTON_STATE_BOTH 两者皆可
      * }
      */
     public void setButtonFeatures(int buttonStateBoth) {
         this.mButtonState = buttonStateBoth;
+        if (buttonStateBoth == BUTTON_STATE_CLICK_AND_HOLD) {
+            mMInDurationAnimation = 0;
+        }
     }
 
     /**

@@ -26,10 +26,11 @@ import com.zhongjh.albumcamerarecorder.album.model.AlbumMediaCollection;
 import com.zhongjh.albumcamerarecorder.album.model.SelectedItemCollection;
 import com.zhongjh.albumcamerarecorder.preview.adapter.PreviewPagerAdapter;
 import com.zhongjh.albumcamerarecorder.utils.MultiMediaUtils;
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.zhongjh.common.entity.MultiMedia;
 
 /**
  * 点击相册图片或者视频进来的

@@ -24,33 +24,29 @@ import androidx.annotation.NonNull;
 import com.zhongjh.albumcamerarecorder.BaseFragment;
 import com.zhongjh.albumcamerarecorder.MainActivity;
 import com.zhongjh.albumcamerarecorder.R;
-import com.zhongjh.albumcamerarecorder.camera.common.Constants;
 import com.zhongjh.albumcamerarecorder.camera.listener.ClickOrLongListener;
 import com.zhongjh.albumcamerarecorder.camera.util.FileUtil;
 import com.zhongjh.albumcamerarecorder.recorder.db.RecordingItem;
 import com.zhongjh.albumcamerarecorder.recorder.widget.SoundRecordingLayout;
 import com.zhongjh.albumcamerarecorder.settings.GlobalSpec;
 import com.zhongjh.albumcamerarecorder.settings.RecordeSpec;
-import com.zhongjh.albumcamerarecorder.utils.BitmapUtils;
 import com.zhongjh.albumcamerarecorder.utils.ViewBusinessUtils;
 import com.zhongjh.albumcamerarecorder.widget.BaseOperationLayout;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.MediaStoreCompat;
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.StatusBarUtils;
-import com.zhongjh.albumcamerarecordercommonkotlin.utils.ThreadUtils;
+import com.zhongjh.common.enums.MultimediaTypes;
+import com.zhongjh.common.utils.MediaStoreCompat;
+import com.zhongjh.common.utils.StatusBarUtils;
+import com.zhongjh.common.utils.ThreadUtils;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
-import static com.zhongjh.albumcamerarecorder.camera.common.Constants.BUTTON_STATE_ONLY_LONG_CLICK;
-import static com.zhongjh.albumcamerarecorder.camera.common.Constants.TYPE_PICTURE;
 import static com.zhongjh.albumcamerarecorder.constants.Constant.EXTRA_MULTIMEDIA_CHOICE;
 import static com.zhongjh.albumcamerarecorder.constants.Constant.EXTRA_MULTIMEDIA_TYPES;
 import static com.zhongjh.albumcamerarecorder.constants.Constant.EXTRA_RESULT_RECORDING_ITEM;
+import static com.zhongjh.albumcamerarecorder.widget.clickorlongbutton.ClickOrLongButton.BUTTON_STATE_ONLY_LONG_CLICK;
 
 /**
  * 录音
@@ -150,7 +146,7 @@ public class SoundRecordingFragment extends BaseFragment {
     @Override
     public boolean onBackPressed() {
         // 判断当前状态是否休闲
-        if (mViewHolder.pvLayout.mState == Constants.STATE_PREVIEW) {
+        if (mViewHolder.pvLayout.mState == SoundRecordingLayout.STATE_PREVIEW) {
             return false;
         } else {
             // 与上次点击返回键时刻作差
@@ -230,6 +226,11 @@ public class SoundRecordingFragment extends BaseFragment {
 
             @Override
             public void onBanClickTips() {
+
+            }
+
+            @Override
+            public void onClickStopTips() {
 
             }
         });
@@ -490,7 +491,7 @@ public class SoundRecordingFragment extends BaseFragment {
         // 根据配置创建文件配置
         GlobalSpec globalSpec = GlobalSpec.getInstance();
         // 音频文件配置路径
-        mAudioMediaStoreCompat = new MediaStoreCompat(mContext.getApplicationContext(),
+        mAudioMediaStoreCompat = new MediaStoreCompat(mContext,
                 globalSpec.audioStrategy == null ? globalSpec.saveStrategy : globalSpec.audioStrategy);
         mFile = mAudioMediaStoreCompat.createFile(2, true);
 

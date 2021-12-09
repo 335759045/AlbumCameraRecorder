@@ -19,12 +19,12 @@ import android.content.Context;
 import android.graphics.Point;
 
 
+import com.zhongjh.common.entity.IncapableCause;
+import com.zhongjh.common.entity.MultiMedia;
+import com.zhongjh.common.enums.MimeType;
 
 import com.zhongjh.albumcamerarecorder.album.filter.BaseFilter;
 import com.zhongjh.albumcamerarecorder.album.utils.PhotoMetadataUtils;
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.IncapableCause;
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
 import com.zhongjh.cameraapp.R;
 
 import java.util.HashSet;
@@ -32,9 +32,9 @@ import java.util.Set;
 
 public class GifSizeFilter extends BaseFilter {
 
-    private int mMinWidth;
-    private int mMinHeight;
-    private int mMaxSize;
+    private final int mMinWidth;
+    private final int mMinHeight;
+    private final int mMaxSize;
 
     public GifSizeFilter(int minWidth, int minHeight, int maxSizeInBytes) {
         mMinWidth = minWidth;

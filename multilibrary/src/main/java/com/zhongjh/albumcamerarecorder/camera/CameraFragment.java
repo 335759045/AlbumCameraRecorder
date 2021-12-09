@@ -25,14 +25,15 @@ import com.zhongjh.albumcamerarecorder.camera.listener.ErrorListener;
 import com.zhongjh.albumcamerarecorder.camera.listener.OperateCameraListener;
 import com.zhongjh.albumcamerarecorder.preview.BasePreviewActivity;
 import com.zhongjh.albumcamerarecorder.utils.ViewBusinessUtils;
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
 import com.zhongjh.imageedit.ImageEditActivity;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.zhongjh.common.entity.MultiMedia;
+import com.zhongjh.common.enums.MultimediaTypes;
 
 import static android.app.Activity.RESULT_OK;
 import static com.zhongjh.albumcamerarecorder.preview.BasePreviewActivity.REQ_IMAGE_EDIT;
@@ -51,7 +52,7 @@ import static com.zhongjh.albumcamerarecorder.constants.Constant.REQUEST_CODE_PR
  */
 public class CameraFragment extends BaseFragment {
 
-    private Activity mActivity;
+    private MainActivity mActivity;
 
     private CameraLayout mCameraLayout;
     private final static int MILLISECOND = 2000;
@@ -76,7 +77,7 @@ public class CameraFragment extends BaseFragment {
     @Override
     public void onAttach(@NotNull Activity activity) {
         super.onAttach(activity);
-        this.mActivity = activity;
+        this.mActivity = (MainActivity) activity;
     }
 
     @Override
@@ -87,7 +88,7 @@ public class CameraFragment extends BaseFragment {
         view.setOnKeyListener((v, keyCode, event) -> keyCode == KeyEvent.KEYCODE_BACK);
 
         mCameraLayout = view.findViewById(R.id.cameraLayout);
-        mCameraLayout.init(this);
+        mCameraLayout.init(mActivity, this);
         mCameraLayout.setErrorListener(new ErrorListener() {
             @Override
             public void onError() {
@@ -101,7 +102,6 @@ public class CameraFragment extends BaseFragment {
         });
 
         initCameraLayoutCloseListener();
-        initCameraLayoutPhotoVideoListener();
         initCameraLayoutOperateCameraListener();
         initCameraLayoutCaptureListener();
         initCameraLayoutEditListener();
@@ -112,14 +112,10 @@ public class CameraFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) {
-            if (mCameraLayout.mState == Constants.STATE_VIDEO) {
-                // 如果是从视频界面回来，就重置状态
-                mCameraLayout.mState = Constants.STATE_PREVIEW;
-            }
+        boolean isReturn = mCameraLayout.onActivityResult(resultCode);
+        if (isReturn) {
             return;
         }
-
         switch (requestCode) {
             case REQUEST_CODE_PREVIEW_CAMRRA:
                 // 如果在预览界面点击了确定
@@ -142,6 +138,7 @@ public class CameraFragment extends BaseFragment {
                 }
                 break;
             case REQUEST_CODE_PREVIEW_VIDEO:
+                // 视频界面
                 ArrayList<String> arrayList = new ArrayList<>();
                 arrayList.add(data.getStringExtra("path"));
                 ArrayList<Uri> arrayListUri = new ArrayList<>();
@@ -157,6 +154,7 @@ public class CameraFragment extends BaseFragment {
                 mActivity.finish();
                 break;
             case REQ_IMAGE_EDIT:
+                // 编辑图片界面
                 mCameraLayout.refreshEditPhoto();
                 break;
             default:
@@ -166,14 +164,11 @@ public class CameraFragment extends BaseFragment {
 
     @Override
     public boolean onBackPressed() {
-        // 判断当前状态是否休闲
-        if (mCameraLayout.mState == Constants.STATE_PREVIEW) {
-            return false;
-        } else if (mCameraLayout.mState == Constants.STATE_VIDEO_IN) {
-            // 录制视频中不能直接返回
-            return true;
+        Boolean isTrue = mCameraLayout.getCameraStateManagement().onBackPressed();
+        if (isTrue != null) {
+            return isTrue;
         } else {
-            // 与上次点击返回键时刻作差
+            // 与上次点击返回键时刻作差，第一次不能立即退出
             if ((System.currentTimeMillis() - mExitTime) > MILLISECOND) {
                 // 大于2000ms则认为是误操作，使用Toast进行提示
                 Toast.makeText(mActivity.getApplicationContext(), getResources().getString(R.string.z_multi_library_press_confirm_again_to_close), Toast.LENGTH_SHORT).show();
@@ -218,49 +213,6 @@ public class CameraFragment extends BaseFragment {
     }
 
     /**
-     * 拍摄按钮事件
-     */
-    private void initCameraLayoutPhotoVideoListener() {
-        mCameraLayout.setPhotoVideoListener(new ClickOrLongListener() {
-            @Override
-            public void actionDown() {
-                // 母窗体禁止滑动
-                ViewBusinessUtils.setTabLayoutScroll(false, ((MainActivity) mActivity), mCameraLayout.mViewHolder.pvLayout);
-            }
-
-            @Override
-            public void onClick() {
-
-            }
-
-            @Override
-            public void onLongClickShort(long time) {
-                // 母窗体启动滑动
-                ViewBusinessUtils.setTabLayoutScroll(true, ((MainActivity) mActivity), mCameraLayout.mViewHolder.pvLayout);
-            }
-
-            @Override
-            public void onLongClick() {
-            }
-
-            @Override
-            public void onLongClickEnd(long time) {
-
-            }
-
-            @Override
-            public void onLongClickError() {
-
-            }
-
-            @Override
-            public void onBanClickTips() {
-
-            }
-        });
-    }
-
-    /**
      * 确认取消事件
      */
     private void initCameraLayoutOperateCameraListener() {
@@ -268,7 +220,7 @@ public class CameraFragment extends BaseFragment {
             @Override
             public void cancel() {
                 // 母窗体启动滑动
-                ViewBusinessUtils.setTabLayoutScroll(true, ((MainActivity) mActivity), mCameraLayout.mViewHolder.pvLayout);
+                ViewBusinessUtils.setTabLayoutScroll(true, mActivity, mCameraLayout.mViewHolder.pvLayout);
             }
 
             @Override
@@ -313,7 +265,7 @@ public class CameraFragment extends BaseFragment {
             public void remove(List<BitmapData> captureData) {
                 // 判断如果删除光图片的时候，母窗体启动滑动
                 if (captureData.size() <= 0) {
-                    ((MainActivity) mActivity).setTabLayoutScroll(true);
+                    mActivity.showHideTableLayout(true);
                 }
             }
 
@@ -321,7 +273,7 @@ public class CameraFragment extends BaseFragment {
             public void add(List<BitmapData> captureDatas) {
                 if (captureDatas.size() > 0) {
                     // 母窗体禁止滑动
-                    ((MainActivity) mActivity).setTabLayoutScroll(false);
+                    mActivity.showHideTableLayout(false);
                 }
             }
         });

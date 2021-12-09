@@ -9,9 +9,10 @@ import com.zhongjh.albumcamerarecorder.album.listener.OnSelectedListener;
 import com.zhongjh.albumcamerarecorder.settings.AlbumSetting;
 import com.zhongjh.albumcamerarecorder.settings.AlbumSpec;
 import com.zhongjh.albumcamerarecorder.settings.MultiMediaSetting;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
 
 import java.util.Set;
+
+import com.zhongjh.common.enums.MimeType;
 
 /**
  * 相册设置接口

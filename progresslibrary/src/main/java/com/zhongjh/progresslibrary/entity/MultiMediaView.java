@@ -2,12 +2,10 @@ package com.zhongjh.progresslibrary.entity;
 
 import android.view.View;
 
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
-import com.zhongjh.progresslibrary.widget.MaskProgressLayout;
+import com.zhongjh.common.entity.MultiMedia;
+import com.zhongjh.common.enums.MultimediaTypes;
 import com.zhongjh.progresslibrary.widget.MaskProgressView;
 import com.zhongjh.progresslibrary.widget.PlayProgressView;
-
 
 /**
  * 多媒体实体类,包含着view
@@ -98,11 +96,5 @@ public class MultiMediaView extends MultiMedia {
     public int hashCode() {
         // 父类已重写
         return super.hashCode();
-    }
-
-    /**
-     * 无视防抖动的影响
-     */
-    public void onClick(View view) {
     }
 }

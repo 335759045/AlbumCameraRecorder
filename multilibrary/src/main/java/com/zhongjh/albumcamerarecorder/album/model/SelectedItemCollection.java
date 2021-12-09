@@ -13,15 +13,16 @@ import com.zhongjh.albumcamerarecorder.settings.AlbumSpec;
 import com.zhongjh.albumcamerarecorder.utils.MultiMediaUtils;
 import com.zhongjh.albumcamerarecorder.utils.PathUtils;
 import com.zhongjh.albumcamerarecorder.utils.SelectableUtils;
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.IncapableCause;
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.MultiMedia;
+import com.zhongjh.common.entity.IncapableCause;
+import com.zhongjh.common.entity.MultiMedia;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import static com.zhongjh.albumcamerarecordercommonkotlin.enums.Constant.IMAGE;
-import static com.zhongjh.albumcamerarecordercommonkotlin.enums.Constant.IMAGE_VIDEO;
-import static com.zhongjh.albumcamerarecordercommonkotlin.enums.Constant.VIDEO;
+import static com.zhongjh.common.enums.Constant.IMAGE;
+import static com.zhongjh.common.enums.Constant.IMAGE_VIDEO;
+import static com.zhongjh.common.enums.Constant.VIDEO;
 
 /**
  * 选择的数据源
@@ -269,7 +270,7 @@ public class SelectedItemCollection {
         if (!AlbumSpec.getInstance().mediaTypeExclusive) {
             // 混合检查
             getSelectCount();
-            if (item.getMimeType().startsWith(IMAGE)) {
+            if (Objects.requireNonNull(item.getMimeType()).startsWith(IMAGE)) {
                 selectedCountMessage = SelectableUtils.isImageMaxCount(mSelectedImageCount, mSelectedVideoCount);
                 if (selectedCountMessage.isMaxSelectableReached()) {
                     maxSelectableReached = true;

@@ -20,8 +20,6 @@ import com.zhongjh.albumcamerarecorder.settings.CameraSetting;
 import com.zhongjh.albumcamerarecorder.settings.GlobalSetting;
 import com.zhongjh.albumcamerarecorder.settings.MultiMediaSetting;
 import com.zhongjh.albumcamerarecorder.settings.RecorderSetting;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MimeType;
-import com.zhongjh.albumcamerarecordercommonkotlin.enums.MultimediaTypes;
 import com.zhongjh.cameraapp.BaseActivity;
 import com.zhongjh.cameraapp.R;
 import com.zhongjh.cameraapp.configuration.GifSizeFilter;
@@ -33,7 +31,9 @@ import com.zhongjh.progresslibrary.widget.MaskProgressLayout;
 
 import java.util.ArrayList;
 
-import com.zhongjh.albumcamerarecordercommonkotlin.entity.SaveStrategy;
+import com.zhongjh.common.entity.SaveStrategy;
+import com.zhongjh.common.enums.MimeType;
+import com.zhongjh.common.enums.MultimediaTypes;
 
 /**
  * 自定义CameraView
